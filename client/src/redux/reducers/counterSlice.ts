@@ -1,5 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import * as userAPI from '../../api/'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface CounterState {
   value: number
@@ -8,14 +7,6 @@ interface CounterState {
 const initialState: CounterState = {
   value: 0,
 }
-
-const fetchUserById = createAsyncThunk(
-    'users/fetchByIdStatus',
-    async (userId, thunkAPI) => {
-      const response = await userAPI.fetchById(userId)
-      return response.data
-    }
-)
 
 export const counterSlice = createSlice({
   name: 'counter',
@@ -38,6 +29,5 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
-
-export default counterSlice.reducer
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export default counterSlice.reducer;
