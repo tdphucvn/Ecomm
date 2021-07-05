@@ -84,17 +84,19 @@ const useStyles = makeStyles((theme) => ({
 const Footer = () => {
     const classes = useStyles();
 
-    const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubscribe = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        const element: HTMLFormElement | any = e.target;
-        const data = Object.fromEntries(new FormData(element).entries());
-        console.log(data);
+        const target = e.target as typeof e.target & {
+            email: { value: string };
+        };
+        const email = target.email.value; 
+        target.email.value = '';
     }
 
     return (
         <div style={{background: '#F2FBFF'}}>
-            <Container style={{paddingTop: 15}}>
-                <div className={classes.container}>
+            <div style={{width: '80%', margin: 'auto'}}>
+                <div className={classes.container} style={{padding: '30px 0'}}>
                     <div className={classes.collectionContainer}>
                         <Typography variant="h5" gutterBottom={true}>Collection</Typography>
                         <ul>
@@ -134,7 +136,7 @@ const Footer = () => {
                             </li>
                             <li>
                                 <form onSubmit={handleSubscribe}>
-                                    <TextField label="Email" variant="outlined" InputProps={{startAdornment: (<InputAdornment position="start"><EmailIcon /></InputAdornment>)}} />
+                                    <TextField label="Email" name="email" variant="outlined" InputProps={{startAdornment: (<InputAdornment position="start"><EmailIcon /></InputAdornment>)}} />
                                     <Button type="submit" color="primary" variant="contained" size="large">Subscribe</Button>
                                 </form>
                             </li>
@@ -148,7 +150,7 @@ const Footer = () => {
                     <div className={classes.divGrow}></div>
                     <div><Typography color="textSecondary">Philip Tran | 2021</Typography></div>
                 </div>
-            </Container>
+            </div>
         </div>
     )
 }
