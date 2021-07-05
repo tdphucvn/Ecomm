@@ -9,7 +9,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import itemsRoute from './routes/items';
+import itemsRoute from './routes/products';
+import contactRoute from './routes/contact';
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use('/items', itemsRoute);
+app.use('/contact', contactRoute);
 
 const uri: string = `${process.env.DB_CONNECTION}`;
 const options = { useUnifiedTopology: true , useNewUrlParser: true };

@@ -145,7 +145,7 @@ const Header = () => {
                             </li>
                             <li>
                                 <IconButton component="a" href="/cart">
-                                    <Badge color="secondary" badgeContent={4}>
+                                    <Badge color="secondary" badgeContent={0}>
                                         <ShoppingCartIcon />
                                     </Badge>
                                 </IconButton>

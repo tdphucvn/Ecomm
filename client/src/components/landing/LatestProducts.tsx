@@ -44,8 +44,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -65,8 +65,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -86,8 +86,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -112,8 +112,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -133,8 +133,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -154,8 +154,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -180,8 +180,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -201,8 +201,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -222,8 +222,8 @@ const LatestProducts = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
+                                <Button color="primary" variant="contained">Add to cart</Button>
                                 <Button color="primary">View More</Button>
-                                <Button  color="primary">Add to cart</Button>
                             </CardActions>
                         </Card>
                     </Grid>

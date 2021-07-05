@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { Typography, makeStyles, Divider, Button, TextField, Container, InputAdornment  } from '@material-ui/core';
 import EmailIcon from '@material-ui/icons/Email';
 
@@ -89,9 +90,11 @@ const Footer = () => {
         const target = e.target as typeof e.target & {
             email: { value: string };
         };
-        const email = target.email.value; 
-        target.email.value = '';
-    }
+        const email = target.email.value;
+        axios.post('http://localhost:5000/contact/newsletter', {email})
+            .then(res => alert(res.data.message))
+            .then(() => target.email.value = '')  
+    };
 
     return (
         <div style={{background: '#F2FBFF'}}>
