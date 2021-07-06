@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import {Router, Switch, Route} from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Header from './components/navigation/Header';
 import Index from './pages/Index';
 import Authentication from './pages/Authentication';
@@ -9,10 +8,9 @@ import AuthHeader from './components/navigation/authentication/AuthHeader';
 import AuthFooter from './components/navigation/authentication/AuthFooter';
 
 const App: FC = () => {
-    const history = createBrowserHistory();
     return (
         <>
-            <Router history={history}>
+            <Router>
                 <Switch>
                     <Route path="/authentication" component={AuthHeader}/>
                     <Route component={Header}/>

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Typography, Avatar, Button, TextField, FormControlLabel, Checkbox, Grid, makeStyles, Container } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Link as RouterLink } from 'react-router-dom';
-import { useHistory } from 'react-router';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +70,7 @@ const Login = (props: any) => {
     axios.post('http://localhost:5000/authentication/login', {username, password})
       .then(res => {
         // alert(res.data.message);
-        history.push('/');
+        history.push("/");
       })
       .catch(error => {
         if(error.response) {
