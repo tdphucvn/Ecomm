@@ -66,7 +66,7 @@ var loginRequest = function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [3, 4];
             case 3:
                 error_1 = _a.sent();
-                res.json({ message: error_1.message });
+                res.status(401).json({ message: error_1.message });
                 return [3, 4];
             case 4:
                 ;
@@ -82,6 +82,7 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
             case 0:
                 _a.trys.push([0, 6, , 7]);
                 credentials = req.body;
+                console.log(credentials);
                 return [4, User_1.default.findOne({ username: credentials.username })];
             case 1:
                 usernameExist = _a.sent();
@@ -99,6 +100,8 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
             case 4:
                 hashedPassword = _a.sent();
                 user = new User_1.default({
+                    firstName: credentials.firstName,
+                    lastName: credentials.lastName,
                     username: credentials.username,
                     email: credentials.email,
                     password: hashedPassword
@@ -111,7 +114,7 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
                 return [3, 7];
             case 6:
                 error_2 = _a.sent();
-                res.json({ message: error_2.message });
+                res.status(400).json({ message: error_2.message });
                 return [3, 7];
             case 7:
                 ;

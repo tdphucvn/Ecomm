@@ -93,7 +93,19 @@ const Footer = () => {
         const email = target.email.value;
         axios.post('http://localhost:5000/contact/newsletter', {email})
             .then(res => alert(res.data.message))
-            .then(() => target.email.value = '')  
+            .then(() => target.email.value = '')
+            .catch((error) => {
+                if(error.response) {
+                    alert(error.response.data.message);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    console.log(error.request);
+                } else {
+                    console.log('Error', error.message);
+                };
+                target.email.value = '';
+            });
     };
 
     return (

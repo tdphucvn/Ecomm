@@ -11,6 +11,7 @@ import cors from 'cors';
 
 import itemsRoute from './routes/products';
 import contactRoute from './routes/contact';
+import authenticationRoute from './routes/authentication';
 
 const app: Application = express();
 
@@ -20,6 +21,7 @@ app.use(cors());
 
 app.use('/items', itemsRoute);
 app.use('/contact', contactRoute);
+app.use('/authentication', authenticationRoute);
 
 const uri: string = `${process.env.DB_CONNECTION}`;
 const options = { useUnifiedTopology: true , useNewUrlParser: true };

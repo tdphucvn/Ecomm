@@ -139,7 +139,7 @@ const Header = () => {
                         </li>
                         <ul style={{flex: 1, justifyContent: 'flex-end'}}>
                             <li style={{marginRight: 20}}>
-                                <RouterLink to="/login">
+                                <RouterLink to="/authentication/login">
                                     <Typography>Login</Typography>
                                 </RouterLink>
                             </li>

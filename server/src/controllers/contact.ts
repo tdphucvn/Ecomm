@@ -17,6 +17,6 @@ export const getNewsletterEmail = async (req: Request, res: Response) => {
         await newEmail.save();
         res.json({message: 'Thank you for sharing your email.'});    
     } catch (err) {
-        res.json({message: err.message});
+        res.status(400).json({message: err.message});
     };
 };

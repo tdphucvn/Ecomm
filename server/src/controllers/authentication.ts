@@ -19,13 +19,14 @@ export const loginRequest = async (req: Request, res: Response): Promise<void> =
 
         res.json({message: 'Succesfully logged in'});
     } catch (error) {
-        res.json({message: error.message});
+        res.status(401).json({message: error.message});
     };
 };
 
 export const registerRequest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const credentials = req.body as Pick<IUser, "username" | "email" | "password">; // Receiving the data from the user and checking if it is valid
+        const credentials = req.body as Pick<IUser, "firstName" | "lastName" | "username" | "email" | "password">; // Receiving the data from the user and checking if it is valid
+        console.log(credentials)
         const usernameExist = await User.findOne({username: credentials.username}); //Checking if the username already exists
         if(usernameExist) throw new Error("Username is already used");
         const emailExists = await User.findOne({email: credentials.email}); //Checking if the email is already being used
@@ -33,6 +34,8 @@ export const registerRequest = async (req: Request, res: Response): Promise<void
         const salt: string = await bcrypt.genSalt(saltRounds); //Generating the salt for hashing
         const hashedPassword: string = await bcrypt.hash(credentials.password, salt) //Hashing the password
         const user: IUser = new User({ //Creating the user
+            firstName: credentials.firstName,
+            lastName: credentials.lastName,
             username: credentials.username,
             email: credentials.email,
             password: hashedPassword
@@ -43,7 +46,7 @@ export const registerRequest = async (req: Request, res: Response): Promise<void
 
         res.json({message: 'Thank your for signing up'});
     } catch (error) {
-        res.json({message: error.message});
+        res.status(400).json({message: error.message});
     };
 };
 
