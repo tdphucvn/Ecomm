@@ -2,7 +2,10 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import { Typography, Avatar, Button, TextField, FormControlLabel, Checkbox, Grid, makeStyles, Container } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { registerRequest } from '../../redux/reducers/authenticate'; 
+import { AppDispatch } from '../../redux/store';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -51,8 +54,10 @@ const Register = () => {
   const [matchingPasswords, setMatchingPasswords] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({error: false, message: ''});
   const classes = useStyles();
+  const dispatch = useDispatch<AppDispatch>();
+  const history = useHistory();
 
-  const handleRegisterRequest = (e: React.SyntheticEvent) => {
+  const handleRegisterRequest = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     
     if(!matchingPasswords) { generateErrorMessage(setErrorMessage, 'Passwords do not match!'); return; };
@@ -78,25 +83,12 @@ const Register = () => {
     const confirmpassword = target.comfirmpassword.value;
     if(password !== confirmpassword) { generateErrorMessage(setErrorMessage, 'Passwords do not match'); return; };
     
-    axios.post('http://localhost:5000/authentication/register', {email, username, password, firstName, lastName})
+    await dispatch(registerRequest({username, password, email, firstName, lastName}))
       .then(res => {
-        alert(res.data.message);
-      })
-      .catch(function (error) {
-          if (error.response) {
-            // Request made and server responded
-            generateErrorMessage(setErrorMessage, error.response.data.message);
-            console.log(error.response.data.message);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-      })
+        if(res.payload.status === 400) {generateErrorMessage(setErrorMessage, res.payload.data.message); return; };
+        alert(res.payload.data.message);
+        history.push('/');
+      });
   };
 
   const handleMatchingPasswords = (e: React.ChangeEvent<HTMLInputElement>) => {

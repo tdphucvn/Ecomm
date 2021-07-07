@@ -45,7 +45,7 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var User_1 = __importDefault(require("../model/User"));
 var saltRounds = 10;
 var loginRequest = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var credentials, user, validPassword, error_1;
+    var credentials, user, validPassword, token, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -61,8 +61,8 @@ var loginRequest = function (req, res) { return __awaiter(void 0, void 0, void 0
                 validPassword = _a.sent();
                 if (!validPassword)
                     throw new Error("Invalid Password");
-                assigningTokens(user, res);
-                res.json({ message: 'Succesfully logged in' });
+                token = assigningTokens(user, res);
+                res.json({ message: 'Succesfully logged in', auth: true, user: user, token: token });
                 return [3, 4];
             case 3:
                 error_1 = _a.sent();
@@ -76,7 +76,7 @@ var loginRequest = function (req, res) { return __awaiter(void 0, void 0, void 0
 }); };
 exports.loginRequest = loginRequest;
 var registerRequest = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var credentials, usernameExist, emailExists, salt, hashedPassword, user, error_2;
+    var credentials, usernameExist, emailExists, salt, hashedPassword, user, token, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -109,8 +109,8 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
                 return [4, user.save()];
             case 5:
                 _a.sent();
-                assigningTokens(user, res);
-                res.json({ message: 'Thank your for signing up' });
+                token = assigningTokens(user, res);
+                res.json({ message: 'Thank your for signing up', auth: true, user: user, token: token });
                 return [3, 7];
             case 6:
                 error_2 = _a.sent();
@@ -140,4 +140,5 @@ var assigningTokens = function (user, response) {
     response.cookie('authorization', newAccessToken, { httpOnly: true });
     response.cookie('refreshToken', newRefreshToken, { httpOnly: true });
     response.cookie('userSession', user, { httpOnly: true });
+    return newAccessToken;
 };

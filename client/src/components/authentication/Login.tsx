@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import axios from 'axios';
 import { Typography, Avatar, Button, TextField, FormControlLabel, Checkbox, Grid, makeStyles, Container } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Link as RouterLink } from 'react-router-dom';
-
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginRequest } from '../../redux/reducers/authenticate'; 
+import { AppDispatch } from '../../redux/store';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,17 +44,20 @@ type ErrorMessage = {
   message: string;
 };
 
+
 const generateErrorMessage = (setter:  React.Dispatch<React.SetStateAction<ErrorMessage>>, message: string) => {
   setter({error: true, message});
 };
 
 
-const Login = (props: any) => {
+const Login = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({error: false, message: ''});
   const classes = useStyles();
-  const history = props.history;
+  const history = useHistory();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleLoginRequest = (e: React.SyntheticEvent) => {
+
+  const handleLoginRequest = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       username: { value: string };
@@ -66,21 +70,11 @@ const Login = (props: any) => {
     if(username === '' || password === '')
     { generateErrorMessage(setErrorMessage, 'Fields are requried'); return; };
     
-    
-    axios.post('http://localhost:5000/authentication/login', {username, password})
+    await dispatch(loginRequest({username, password}))
       .then(res => {
-        // alert(res.data.message);
-        history.push("/");
-      })
-      .catch(error => {
-        if(error.response) {
-          generateErrorMessage(setErrorMessage, error.response.data.message);
-          console.log(error.response.data);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log('Error', error.message);
-        };
+        if(res.payload.status === 401) {generateErrorMessage(setErrorMessage, res.payload.message); return; };
+        alert(res.payload.data.message);
+        history.push('/');
       });
   };
 

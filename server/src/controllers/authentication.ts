@@ -15,9 +15,9 @@ export const loginRequest = async (req: Request, res: Response): Promise<void> =
         const validPassword = await bcrypt.compare(credentials.password, user.password);
         if(!validPassword) throw new Error("Invalid Password");
         
-        assigningTokens(user, res);
+        const token = assigningTokens(user, res);
 
-        res.json({message: 'Succesfully logged in'});
+        res.json({message: 'Succesfully logged in', auth: true, user, token});
     } catch (error) {
         res.status(401).json({message: error.message});
     };
@@ -42,9 +42,9 @@ export const registerRequest = async (req: Request, res: Response): Promise<void
         });
         await user.save(); //Saving the new user
 
-        assigningTokens(user, res);
+        const token = assigningTokens(user, res);
 
-        res.json({message: 'Thank your for signing up'});
+        res.json({message: 'Thank your for signing up', auth: true, user, token});
     } catch (error) {
         res.status(400).json({message: error.message});
     };
@@ -65,4 +65,6 @@ const assigningTokens = (user: IUser, response: Response) => {
     response.cookie('authorization', newAccessToken, {httpOnly: true}); // Using cookie to store Access token
     response.cookie('refreshToken', newRefreshToken, {httpOnly: true}); // Using cookie to store Refresh token
     response.cookie('userSession', user, {httpOnly: true}); // Using cookie to store data about the user
+
+    return newAccessToken;
 }
