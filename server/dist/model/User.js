@@ -39,5 +39,9 @@ var userSchema = new mongoose_1.default.Schema({
         type: Date,
         default: Date.now
     },
+    admin: {
+        type: Boolean,
+        default: false,
+    },
 });
 exports.default = mongoose_1.model('user', userSchema);

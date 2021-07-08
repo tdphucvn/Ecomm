@@ -110,6 +110,11 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
             case 5:
                 _a.sent();
                 token = assigningTokens(user, res);
+                res.cookie('refreshtoken', token, {
+                    httpOnly: true,
+                    path: '/user/refresh_token',
+                    maxAge: 7 * 24 * 60 * 60 * 1000
+                });
                 res.json({ message: 'Thank your for signing up', auth: true, user: user, token: token });
                 return [3, 7];
             case 6:
@@ -128,6 +133,8 @@ var logoutRequest = function (req, res) { return __awaiter(void 0, void 0, void 
         res.clearCookie('authorization');
         res.clearCookie('refreshToken');
         res.clearCookie('userSession');
+        console.log('Server logout');
+        res.status(200).json({ message: 'Logged Out' });
         return [2];
     });
 }); };

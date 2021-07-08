@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postSearchItem = exports.getCertainItemDetails = exports.getItems = void 0;
+exports.addProduct = exports.postSearchItem = exports.getCertainItemDetails = exports.getItems = void 0;
 var getItems = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         res.json({ message: "hello world from backend" });
@@ -60,3 +60,13 @@ var postSearchItem = function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); };
 exports.postSearchItem = postSearchItem;
+var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+        data = req.body;
+        console.log(data);
+        res.json({ message: 'test upload' });
+        return [2];
+    });
+}); };
+exports.addProduct = addProduct;

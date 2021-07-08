@@ -44,6 +44,12 @@ export const registerRequest = async (req: Request, res: Response): Promise<void
 
         const token = assigningTokens(user, res);
 
+        res.cookie('refreshtoken', token, {
+            httpOnly: true,
+            path: '/user/refresh_token',
+            maxAge: 7*24*60*60*1000 // 7d
+        });
+
         res.json({message: 'Thank your for signing up', auth: true, user, token});
     } catch (error) {
         res.status(400).json({message: error.message});
@@ -54,6 +60,10 @@ export const logoutRequest = async (req: Request, res: Response): Promise<void> 
     res.clearCookie('authorization'); 
     res.clearCookie('refreshToken');
     res.clearCookie('userSession');
+
+    console.log('Server logout');
+
+    res.status(200).json({message: 'Logged Out'});
 };
 
 const assigningTokens = (user: IUser, response: Response) => {

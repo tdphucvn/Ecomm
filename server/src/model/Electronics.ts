@@ -28,6 +28,10 @@ const electronics: Schema = new mongoose.Schema({
         type: Date, 
         default: Date.now
     },
+    category: {
+        type: String,
+        default: 'electronics',
+    },
 });
 
 export default model<IProduct>('electronics', electronics);

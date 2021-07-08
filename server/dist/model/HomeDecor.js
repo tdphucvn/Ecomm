@@ -47,5 +47,9 @@ var homeDecor = new mongoose_1.default.Schema({
         type: Date,
         default: Date.now
     },
+    category: {
+        type: String,
+        default: 'homeDecor',
+    },
 });
 exports.default = mongoose_1.model('homeDecor', homeDecor);

@@ -47,5 +47,9 @@ var grocery = new mongoose_1.default.Schema({
         type: Date,
         default: Date.now
     },
+    category: {
+        type: String,
+        default: 'grocery',
+    },
 });
 exports.default = mongoose_1.model('grocery', grocery);

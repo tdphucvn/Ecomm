@@ -1,14 +1,10 @@
 import mongoose from 'mongoose';
 
-type Description = {
-    overview: string,
-    params: Array<string>,
-};
 
 export interface IProduct extends mongoose.Document{
     name: string;
     price: number;
-    description: Description;
+    description: string;
     rating: number;
     soldPieces: number;
     image: Buffer;

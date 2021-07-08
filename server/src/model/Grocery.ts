@@ -28,6 +28,10 @@ const grocery: Schema = new mongoose.Schema({
         type: Date, 
         default: Date.now
     },
+    category: {
+        type: String,
+        default: 'grocery',
+    },
 });
 
 export default model<IProduct>('grocery', grocery);

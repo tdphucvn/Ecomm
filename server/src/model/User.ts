@@ -20,6 +20,10 @@ const userSchema: Schema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    admin: {
+        type: Boolean,
+        default: false,
+    },
 });  
 
 export default model<IUser>('user', userSchema);

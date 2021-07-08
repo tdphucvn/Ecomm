@@ -9,4 +9,5 @@ var products_1 = require("../controllers/products");
 router.get('/', products_1.getItems);
 router.get('/:id', products_1.getCertainItemDetails);
 router.post('/search', products_1.postSearchItem);
+router.post('/addProduct', products_1.addProduct);
 exports.default = router;

@@ -13,3 +13,9 @@ export const getCertainItemDetails = async (req: Request, res: Response): Promis
 export const postSearchItem = async (req: Request, res: Response): Promise<void> => {
     res.json({search:'Search Item'});
 };
+
+export const addProduct = async (req: Request, res: Response): Promise<void> => {
+    const data = req.body;
+    console.log(data);
+    res.json({message: 'test upload'});
+};

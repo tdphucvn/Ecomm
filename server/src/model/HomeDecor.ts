@@ -28,6 +28,10 @@ const homeDecor: Schema = new mongoose.Schema({
         type: Date, 
         default: Date.now
     },
+    category: {
+        type: String,
+        default: 'homeDecor',
+    },
 });
 
 export default model<IProduct>('homeDecor', homeDecor);
