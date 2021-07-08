@@ -1,9 +1,12 @@
-import React from 'react';
-import { Typography, makeStyles, Link, TextField, Badge, IconButton } from '@material-ui/core';
+import React, {useState, useEffect} from 'react';
+import { Typography, makeStyles, Link, TextField, Badge, IconButton, Button } from '@material-ui/core';
 import logo from '../../images/logo.png';
 import { Link as RouterLink } from 'react-router-dom';
 import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../redux/store';
+import { logoutRequest } from '../../redux/reducers/authenticate';
 
 const useStyles = makeStyles((theme) => ({
     sumBar: {
@@ -84,8 +87,44 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+type Auth = {
+    logged: boolean;
+    link: string;
+    text: string;
+};
+
+const Authentication = (props: Auth) => {
+    const {link, text} = props;
+    return (
+        <RouterLink to={`/authentication${link}`}>
+            <Typography>{text}</Typography>
+        </RouterLink>
+    )
+};
+
 const Header = () => {
     const classes = useStyles();
+    const dispatch = useDispatch<AppDispatch>();
+    const [auth, setAuth] = useState<Auth>({logged: false, link: '/login', text: 'Login'});
+    const [adminState, setAdminState] = useState<boolean>(false);
+    const { authenticated, admin } = useSelector((state: RootState) => state.auth);
+    const { count } = useSelector((state: RootState) => state.cart);
+
+    useEffect(() => {
+        if(authenticated) { setAuth({logged: true, link: '/logout', text: 'Log Out'}); return };
+        setAuth({logged: false, link: '/login', text: 'Login'});
+    }, [authenticated]);
+
+    useEffect(() => {
+        if(admin) { setAdminState(true); return; };
+        setAdminState(false);
+    }, [admin]);
+
+    const handleLogout = async () => {
+        await dispatch(logoutRequest({message: "Logout request"}))
+            .then(res => console.log(res));
+    };
+
 
     return (
         <>
@@ -118,16 +157,20 @@ const Header = () => {
                                     <Typography>COLLECTION</Typography>
                                 </RouterLink>
                             </li>
-                            <li style={{marginRight: 20}}>
-                                <RouterLink to="/products">
-                                    <Typography>PRODUCTS</Typography>
-                                </RouterLink>
-                            </li>
-                            <li style={{marginRight: 20}}>
-                                <RouterLink to="/offers">
-                                    <Typography>OFFERS</Typography>
-                                </RouterLink>
-                            </li>
+                            
+                            {adminState ? 
+                                <li style={{marginRight: 20}}>
+                                    <RouterLink to="/manage">
+                                        <Typography>MANAGE PRODUCTS</Typography>
+                                    </RouterLink>
+                                </li>
+                                :
+                                <li style={{marginRight: 20}}>
+                                    <RouterLink to="/products">
+                                        <Typography>PRODUCTS</Typography>
+                                    </RouterLink>
+                                </li>
+                            }
                         </ul>
                         <li style={{flex: 2, justifyContent: 'flex-end'}}>
                             <div className={classes.search}>
@@ -139,13 +182,13 @@ const Header = () => {
                         </li>
                         <ul style={{flex: 1, justifyContent: 'flex-end'}}>
                             <li style={{marginRight: 20}}>
-                                <RouterLink to="/authentication/login">
-                                    <Typography>Login</Typography>
-                                </RouterLink>
+                                {!auth.logged ? <Authentication {...auth}/> : 
+                                    <Button onClick={handleLogout}>Log Out</Button>
+                                }
                             </li>
                             <li>
                                 <IconButton component="a" href="/cart">
-                                    <Badge color="secondary" badgeContent={0}>
+                                    <Badge color="secondary" badgeContent={count}>
                                         <ShoppingCartIcon />
                                     </Badge>
                                 </IconButton>

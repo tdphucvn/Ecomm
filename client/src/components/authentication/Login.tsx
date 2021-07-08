@@ -73,7 +73,6 @@ const Login = () => {
     await dispatch(loginRequest({username, password}))
       .then(res => {
         if(res.payload.status === 401) {generateErrorMessage(setErrorMessage, res.payload.message); return; };
-        alert(res.payload.data.message);
         history.push('/');
       });
   };
@@ -92,7 +91,6 @@ const Login = () => {
         <form className={classes.form} noValidate onSubmit={handleLoginRequest}>
           <TextField variant="outlined" margin="normal" required fullWidth id="username" label="Username" type="text" name="username" autoFocus />
           <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             Sign In
           </Button>

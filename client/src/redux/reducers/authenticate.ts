@@ -10,6 +10,7 @@ type User = {
 interface Authenticate {
     loading: boolean;
     authenticated: boolean;
+    admin: boolean;
     accessToken: Array<string>;
     user: Array<User>;
 };
@@ -25,11 +26,16 @@ type RegisterCredentials = {
     email: string
     firstName: string;
     lastName: string;
-}
+};
+
+type LogoutData = {
+    message: string;
+};
 
 const initialState: Authenticate = {
     loading: false,
     authenticated: false,
+    admin: false,
     accessToken: [],
     user: []
 };
@@ -41,6 +47,7 @@ export const loginRequest = createAsyncThunk(
             const {username, password} = credentials;
             const response = await authenticateAPI.loginRequest(username, password);
             if(response.status === 401) return rejectWithValue({message: response.data.message, status: response.status});
+            console.log(response);
             return response;
         } catch (error) {
             return error;
@@ -62,36 +69,52 @@ export const registerRequest = createAsyncThunk(
     },
 );
 
+export const logoutRequest = createAsyncThunk(
+    'user/logoutRequestStatus',
+    async ( data: LogoutData, {rejectWithValue}) => {
+        try {
+            const { message } = data;
+            const response = await authenticateAPI.logoutRequest();
+            console.log(message);
+            return response;
+        } catch (error) {
+            return rejectWithValue(error);
+        };
+    },
+);
+
 export const authenticateSlise = createSlice({
     name: 'authenticate',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(loginRequest.pending, (state, action) => {
-            state.loading = true;
-        });
         builder.addCase(loginRequest.fulfilled, (state, action) => {
             state.loading = false;
             state.authenticated = true;
             state.user = action.payload.data.user;
             state.accessToken = action.payload.data.token;
+            if(action.payload.data.user.admin) state.admin = true;
         });
         builder.addCase(loginRequest.rejected, (state, action) => {
             state.loading = false;
             state.authenticated = false;
-        });
-        builder.addCase(registerRequest.pending, (state, action) => {
-            state.loading = true;
         });
         builder.addCase(registerRequest.fulfilled, (state, action) => {
             state.loading = false;
             state.authenticated = true;
             state.user = action.payload.data.user;
             state.accessToken = action.payload.data.token;
+            if(action.payload.data.user.admin) state.admin = true;
         });
         builder.addCase(registerRequest.rejected, (state, action) => {
             state.loading = false;
             state.authenticated = false;
+        });
+        builder.addCase(logoutRequest.fulfilled, (state, action) => {
+            state.authenticated = false;
+            state.admin = false;
+            state.user = [];
+            state.accessToken = [];
         });
     },
 });

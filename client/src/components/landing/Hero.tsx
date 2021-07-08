@@ -37,8 +37,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Hero = () => {
-    const [activeImage, setActiveImage] = useState<number>(0);
-
     const classes = useStyles();
 
     return (

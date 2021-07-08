@@ -6,6 +6,7 @@ import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { registerRequest } from '../../redux/reducers/authenticate'; 
 import { AppDispatch } from '../../redux/store';
+import { getEmailNewsletter } from '../../api/contact';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -52,6 +53,7 @@ const generateErrorMessage = (setter:  React.Dispatch<React.SetStateAction<Error
 const Register = () => {
   const [password, setPassword] = useState<string>('');
   const [matchingPasswords, setMatchingPasswords] = useState<boolean>(true);
+  const [subscribe, setSubscribe] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({error: false, message: ''});
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -86,8 +88,12 @@ const Register = () => {
     await dispatch(registerRequest({username, password, email, firstName, lastName}))
       .then(res => {
         if(res.payload.status === 400) {generateErrorMessage(setErrorMessage, res.payload.data.message); return; };
-        alert(res.payload.data.message);
-        history.push('/');
+      })
+      .then(() => {
+        if(subscribe) return getEmailNewsletter(email);
+      })
+      .then((data) => {
+        console.log(data);
       });
   };
 
@@ -95,6 +101,10 @@ const Register = () => {
     const confirmPassword = e.target.value;
     if(confirmPassword !== password){ setMatchingPasswords(false); return};
     setMatchingPasswords(true);
+  };
+
+  const handleSubscribe = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubscribe(e.target.checked);
   };
 
   return (
@@ -129,7 +139,7 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                control={<Checkbox value="allowExtraEmails" color="primary" checked={subscribe} onChange={handleSubscribe}/>}
                 label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>

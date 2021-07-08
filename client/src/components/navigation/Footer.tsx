@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Typography, makeStyles, Divider, Button, TextField, Container, InputAdornment  } from '@material-ui/core';
 import EmailIcon from '@material-ui/icons/Email';
+import { getEmailNewsletter } from '../../api/contact';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -85,27 +86,16 @@ const useStyles = makeStyles((theme) => ({
 const Footer = () => {
     const classes = useStyles();
 
-    const handleSubscribe = (e: React.SyntheticEvent) => {
+    const handleSubscribe = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         const target = e.target as typeof e.target & {
             email: { value: string };
         };
         const email = target.email.value;
-        axios.post('http://localhost:5000/contact/newsletter', {email})
-            .then(res => alert(res.data.message))
-            .then(() => target.email.value = '')
-            .catch((error) => {
-                if(error.response) {
-                    alert(error.response.data.message);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    console.log(error.request);
-                } else {
-                    console.log('Error', error.message);
-                };
-                target.email.value = '';
-            });
+
+        const response = await getEmailNewsletter(email);
+        if(response) alert(response);
+        target.email.value = '';
     };
 
     return (
@@ -123,9 +113,9 @@ const Footer = () => {
                     <div className={classes.productsContainer}>
                         <Typography variant="h5" gutterBottom={true}>Products</Typography>
                         <ul>
-                            <li><Typography component="a" href="#" gutterBottom={true}>On the Edge</Typography></li>
-                            <li><Typography component="a" href="#" gutterBottom={true}>Master of the Night</Typography></li>
-                            <li><Typography component="a" href="#" gutterBottom={true}>Never More</Typography></li>
+                            <li><Typography component="a" href="#" gutterBottom={true}>Home Decor</Typography></li>
+                            <li><Typography component="a" href="#" gutterBottom={true}>Electronics</Typography></li>
+                            <li><Typography component="a" href="#" gutterBottom={true}>Shop Grocery</Typography></li>
                         </ul>
                     </div>
                     <div className={classes.contactContainer}>
