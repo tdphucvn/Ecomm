@@ -20,7 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importStar(require("mongoose"));
-var grocery = new mongoose_1.default.Schema({
+var homeDecor = new mongoose_1.default.Schema({
     name: {
         type: String,
         required: true,
@@ -29,14 +29,15 @@ var grocery = new mongoose_1.default.Schema({
         type: Number,
         required: true,
     },
-    descripition: {
+    description: {
         type: String,
+        required: true,
     },
     rating: {
         type: Number,
     },
     soldPieces: {
-        type: Number,
+        type: Object,
         default: 0,
     },
     image: {
@@ -49,7 +50,7 @@ var grocery = new mongoose_1.default.Schema({
     },
     category: {
         type: String,
-        default: 'grocery',
+        required: true,
     },
 });
-exports.default = mongoose_1.model('grocery', grocery);
+exports.default = mongoose_1.model('products', homeDecor);

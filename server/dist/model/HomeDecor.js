@@ -30,17 +30,17 @@ var homeDecor = new mongoose_1.default.Schema({
         required: true,
     },
     descripition: {
-        type: Object,
+        type: String,
     },
     rating: {
         type: Number,
     },
     soldPieces: {
-        type: Number,
+        type: Object,
         default: 0,
     },
     image: {
-        type: Buffer,
+        type: Object,
         required: true,
     },
     date: {

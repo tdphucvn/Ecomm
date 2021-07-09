@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from 'mongoose';
 import { IProduct } from '../types/products';
 
-const grocery: Schema = new mongoose.Schema({
+const homeDecor: Schema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -10,18 +10,19 @@ const grocery: Schema = new mongoose.Schema({
         type: Number, 
         required: true,
     },
-    descripition: {
-        type: Object,
+    description: {
+        type: String,
+        required: true,
     },
     rating: {
         type: Number,
     },
     soldPieces: {
-        type: Number,
+        type: Object,
         default: 0,
     },
     image: {
-        type: Buffer,
+        type: Object,
         required: true,
     },
     date: {
@@ -30,8 +31,8 @@ const grocery: Schema = new mongoose.Schema({
     },
     category: {
         type: String,
-        default: 'grocery',
+        required: true,
     },
 });
 
-export default model<IProduct>('grocery', grocery);
+export default model<IProduct>('products', homeDecor);

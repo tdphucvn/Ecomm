@@ -30,7 +30,7 @@ var electronics = new mongoose_1.default.Schema({
         required: true,
     },
     descripition: {
-        type: Object,
+        type: String,
     },
     rating: {
         type: Number,
@@ -40,7 +40,7 @@ var electronics = new mongoose_1.default.Schema({
         default: 0,
     },
     image: {
-        type: Buffer,
+        type: Object,
         required: true,
     },
     date: {

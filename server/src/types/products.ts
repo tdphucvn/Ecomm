@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
 
+type Image = {
+    url: string;
+    public_id: string;
+}
 
 export interface IProduct extends mongoose.Document{
     name: string;
@@ -7,6 +11,6 @@ export interface IProduct extends mongoose.Document{
     description: string;
     rating: number;
     soldPieces: number;
-    image: Buffer;
+    image: Image;
     date: Date;
 };

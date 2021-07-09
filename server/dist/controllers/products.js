@@ -35,15 +35,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addProduct = exports.postSearchItem = exports.getCertainItemDetails = exports.getItems = void 0;
-var getItems = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({ message: "hello world from backend" });
-        return [2];
+exports.addProduct = exports.postSearchItem = exports.getCertainItemDetails = exports.getProducts = void 0;
+var Products_1 = __importDefault(require("../model/Products"));
+var cloudinary = require('cloudinary').v2;
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET_KEY,
+});
+var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, sort, filter, query, fetchedProducts, numberOfProducts, numberOfPages;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.query, sort = _a.sort, filter = _a.filter;
+                query = {};
+                switch (filter) {
+                    case 'all':
+                        query = {};
+                        break;
+                    case 'electronics':
+                        query = { category: 'electronics' };
+                        break;
+                    case 'homeDecor':
+                        query = { category: 'homeDecor' };
+                        break;
+                    case 'grocery':
+                        query = { category: 'grocery' };
+                        break;
+                    default:
+                        break;
+                }
+                ;
+                return [4, Products_1.default.find(query).sort({})];
+            case 1:
+                fetchedProducts = _b.sent();
+                return [4, Products_1.default.countDocuments()];
+            case 2:
+                numberOfProducts = _b.sent();
+                numberOfPages = Math.ceil(numberOfProducts / 6);
+                res.json({ message: "Success fetch", fetchedProducts: fetchedProducts, numberOfPages: numberOfPages });
+                return [2];
+        }
     });
 }); };
-exports.getItems = getItems;
+exports.getProducts = getProducts;
 var getCertainItemDetails = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id;
     return __generator(this, function (_a) {
@@ -61,12 +101,43 @@ var postSearchItem = function (req, res) { return __awaiter(void 0, void 0, void
 }); };
 exports.postSearchItem = postSearchItem;
 var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
-    return __generator(this, function (_a) {
-        data = req.body;
-        console.log(data);
-        res.json({ message: 'test upload' });
-        return [2];
+    var _a, name, price, description, file, category, uploadResponse, url, public_id, newProduct, savedProduct, error_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 3, , 4]);
+                _a = req.body, name = _a.name, price = _a.price, description = _a.description, file = _a.file, category = _a.category;
+                return [4, cloudinary.uploader.upload(file, {
+                        upload_preset: 'products',
+                    })];
+            case 1:
+                uploadResponse = _b.sent();
+                url = uploadResponse.url, public_id = uploadResponse.public_id;
+                console.log(description);
+                newProduct = new Products_1.default({
+                    name: name,
+                    price: parseInt(price),
+                    description: description,
+                    image: {
+                        url: url,
+                        public_id: public_id,
+                    },
+                    category: category,
+                });
+                return [4, newProduct.save()];
+            case 2:
+                savedProduct = _b.sent();
+                res.json({ message: 'Product added', savedProduct: savedProduct });
+                return [3, 4];
+            case 3:
+                error_1 = _b.sent();
+                console.error(error_1);
+                res.status(500).json({ err: 'Something went wrong' });
+                return [3, 4];
+            case 4:
+                ;
+                return [2];
+        }
     });
 }); };
 exports.addProduct = addProduct;

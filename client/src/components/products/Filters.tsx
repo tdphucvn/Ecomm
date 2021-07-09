@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, SetStateAction, Dispatch } from 'react';
 import { TextField, Select, Typography, makeStyles, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
@@ -24,14 +24,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-    filterMethod: string | undefined;
+    sortState: string;
+    filterState: string;
+    sortStateFunction: Dispatch<SetStateAction<string>>;
+    filterStateFunction: Dispatch<SetStateAction<string>>;
 };
 
 const Filters = (props: Props) => {
 
     const classes = useStyles();
-    const [sort, setSort] = useState<string>('none');
-    const [filter, setFilter] = useState<string>('all');
+    const [sort, setSort] = [props.sortState, props.sortStateFunction];
+    const [filter, setFilter] = [props.filterState, props.filterStateFunction];
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSortChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -47,9 +50,9 @@ const Filters = (props: Props) => {
         console.log(query)
     };
 
-    useEffect(() => {
-        if(props.filterMethod) setFilter(props.filterMethod);
-    }, [props.filterMethod]);
+    const handleFilterChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
+        setFilter(event.target.value as string);
+    };
 
     useEffect(() => {
         console.log(sort);
@@ -68,9 +71,9 @@ const Filters = (props: Props) => {
                 </form>
                 <FormControl className={classes.selectContainer}>
                     <InputLabel id="sort-by-label">Filter</InputLabel>
-                    <Select value={filter} onChange={handleSortChange} labelId="sort-by-label" className={classes.sortSelect}>
+                    <Select value={filter} onChange={handleFilterChange} labelId="sort-by-label" className={classes.sortSelect}>
                         <MenuItem value="all">All Items</MenuItem>
-                        <MenuItem value="home">Home Decor</MenuItem>
+                        <MenuItem value="homeDecor">Home Decor</MenuItem>
                         <MenuItem value="electronics">Electronics</MenuItem>
                         <MenuItem value="grocery">Grocery</MenuItem>
                     </Select>
@@ -79,6 +82,7 @@ const Filters = (props: Props) => {
                     <InputLabel id="sort-by-label">Sort By</InputLabel>
                     <Select value={sort} onChange={handleSortChange} labelId="sort-by-label" className={classes.sortSelect}>
                         <MenuItem value="none">None</MenuItem>
+                        <MenuItem value="alpha">A-Z</MenuItem>
                         <MenuItem value="price">Price</MenuItem>
                         <MenuItem value="popularity">Popularity</MenuItem>
                     </Select>

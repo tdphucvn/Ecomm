@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import { Typography, makeStyles, TextField, Select, MenuItem, Button, FormControl, InputLabel } from '@material-ui/core';
+import { Typography, makeStyles, TextField, Select, MenuItem, Button, FormControl, InputLabel, CircularProgress } from '@material-ui/core';
 import axios from 'axios';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -52,8 +53,10 @@ const useStyles = makeStyles((theme) => ({
 const ProductAdd = () => {
     const classes = useStyles();
     const [url, setURL] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const [category, setCategory] = useState<string>('electronics')
     const [imageFile, setImageFile] = useState<File | null>(null)
+    const history = useHistory();
 
     const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files !== null) {
@@ -82,16 +85,18 @@ const ProductAdd = () => {
         const name = target.name.value;
         const price = target.price.value;
         const description = target.description.value;
+        console.log(description)
 
         const reader = new FileReader();
         if(imageFile !== null) {
             reader.readAsDataURL(imageFile);
             reader.onloadend = () => {
-                const file = JSON.stringify({data: reader.result});
+                const file = reader.result;
+                setLoading(true);
                 axios.post('http://localhost:5000/products/addProduct', {name, price, description, file, category}, {headers: { 'Content-Type': 'application/json' }})
-                    .then(res => console.log(res))
-                    .catch(err => console.log(err));    
-            };    
+                    .then(res => {console.log(res); setLoading(false); history.push('/manage')})
+                    .catch(err => console.log(err))  
+            };
         }
 
     };
@@ -125,7 +130,7 @@ const ProductAdd = () => {
                             <MenuItem value="grocery">Grocery</MenuItem>
                         </Select>
                     </FormControl>
-                    <Button variant="contained" color="primary" type="submit" className={classes.widthMargin}>Save Changes</Button>
+                    <Button variant="contained" color="primary" type="submit" className={classes.widthMargin}>{loading ? <CircularProgress color="secondary" /> : 'Save Changes' }</Button>
                 </div>
             </form>
         </div>
