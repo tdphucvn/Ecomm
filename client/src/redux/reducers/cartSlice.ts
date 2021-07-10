@@ -1,9 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type Item = {
-  id: string;
-  amount: number;
+  _id: string;
+  date: string;
+  description: string;
+  image: {
+    url: string;
+    public_id: string;
+  };
+  name: string;
+  price: number;
+  soldPieces: number;
 }
+
 
 interface CartState {
   items: Array<Item>;
@@ -19,8 +28,9 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCart: (state) => {
+    addToCart: (state, action) => {
       state.count++;
+      state.items.push(action.payload)
     },
     removeFromCart: (state) => {
       

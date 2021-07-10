@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { Typography, Card, CardMedia, CardContent, CardActions, Button, makeStyles, Grid, CircularProgress } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
-import axios from 'axios';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductsRequest } from '../../redux/reducers/productsSlice';
+import { AppDispatch, RootState } from '../../redux/store';
+import { addToCart } from '../../redux/reducers/cartSlice';
+ 
 type Image = {
     url: string;
     public_id: string;
@@ -41,27 +44,25 @@ type Props = {
 
 const DisplayProducts = (props: Props) => {
     const classes = useStyles();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [fetchedProductsArray, setFetchedProductsArray] = useState<Array<Product>>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const dispatch = useDispatch<AppDispatch>();
+    const { products } = useSelector((state: RootState) => state.products)
 
     useEffect(() => {
         setLoading(true);
         const { sortState, filterState } = props;
-        console.log(sortState, filterState)
-        axios.get(`http://localhost:5000/products?sort=${sortState}&filter=${filterState}`)
-        .then(res => res.data.fetchedProducts)
-        .then(fetchedProducts => {
-            setTimeout(() => {setFetchedProductsArray(fetchedProducts);}, 500);
-            console.log(fetchedProducts);
-            setLoading(false);
-        });
+        dispatch(getProductsRequest({sortState, filterState}))
+            .then(res => {
+                console.log(res);
+                setLoading(false);
+            });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.sortState, props.filterState]);
 
-    if(fetchedProductsArray.length !== 0) {
+    if(products.length !== 0) {
         return (
             <Grid container spacing={3} className={classes.productsContainer}>
-            { fetchedProductsArray.map(product => (
+            { products.map(product => (
                 <Grid item md={4} sm={6} xs={12} key={product.image.public_id}>
                     <Card>
                         <CardMedia image={product.image.url} className={classes.media} title="Product"/>
@@ -78,7 +79,7 @@ const DisplayProducts = (props: Props) => {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button color="primary" variant="contained">Add to cart</Button>
+                            <Button color="primary" variant="outlined" onClick={() => dispatch(addToCart(product))}>Add to cart</Button>
                             <Button color="primary">View More</Button>
                         </CardActions>
                     </Card>
@@ -86,13 +87,14 @@ const DisplayProducts = (props: Props) => {
             )) }
             </Grid>
         );
-    } else if(!loading && fetchedProductsArray.length === 0) {
+    } else if(!loading && products.length === 0) {
         return (
             <div className={classes.loadingContainer}>
-                <Typography variant="h6" component="h4">We haven't found any products that match the filter.</Typography>
+                <CircularProgress />
             </div>
         )
     } else {
+
         return (
             <div className={classes.loadingContainer}>
                 <CircularProgress />

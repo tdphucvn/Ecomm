@@ -48,12 +48,13 @@ cloudinary.config({
     api_secret: process.env.CLOUD_API_SECRET_KEY,
 });
 var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, sort, filter, query, fetchedProducts, numberOfProducts, numberOfPages;
+    var _a, sort, filter, query, sortQuery, fetchedProducts, numberOfProducts, numberOfPages;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _a = req.query, sort = _a.sort, filter = _a.filter;
                 query = {};
+                sortQuery = {};
                 switch (filter) {
                     case 'all':
                         query = {};
@@ -71,7 +72,24 @@ var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0,
                         break;
                 }
                 ;
-                return [4, Products_1.default.find(query).sort({})];
+                switch (sort) {
+                    case 'none':
+                        sortQuery = {};
+                        break;
+                    case 'alpha':
+                        sortQuery = { 'name': 1 };
+                        break;
+                    case 'price':
+                        sortQuery = { 'price': -1 };
+                        break;
+                    case 'popularity':
+                        sortQuery = { 'rating': 1 };
+                        break;
+                    default:
+                        break;
+                }
+                ;
+                return [4, Products_1.default.find(query).sort(sortQuery)];
             case 1:
                 fetchedProducts = _b.sent();
                 return [4, Products_1.default.countDocuments()];

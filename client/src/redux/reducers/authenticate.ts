@@ -83,7 +83,7 @@ export const logoutRequest = createAsyncThunk(
     },
 );
 
-export const authenticateSlise = createSlice({
+export const authenticateSlice = createSlice({
     name: 'authenticate',
     initialState,
     reducers: {},
@@ -120,4 +120,4 @@ export const authenticateSlise = createSlice({
 });
 
 
-export default authenticateSlise.reducer;
+export default authenticateSlice.reducer;

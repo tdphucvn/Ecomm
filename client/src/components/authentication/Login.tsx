@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Typography, Avatar, Button, TextField, FormControlLabel, Checkbox, Grid, makeStyles, Container } from '@material-ui/core';
+import { Typography, Avatar, Button, TextField, Grid, makeStyles, Container } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';

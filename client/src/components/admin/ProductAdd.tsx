@@ -3,6 +3,8 @@ import { Typography, makeStyles, TextField, Select, MenuItem, Button, FormContro
 import axios from 'axios';
 import { useHistory } from 'react-router';
 
+import { addProduct } from '../../api/products';
+
 const useStyles = makeStyles((theme) => ({
     container: {
         width: '80%',
@@ -85,7 +87,6 @@ const ProductAdd = () => {
         const name = target.name.value;
         const price = target.price.value;
         const description = target.description.value;
-        console.log(description)
 
         const reader = new FileReader();
         if(imageFile !== null) {
@@ -93,9 +94,9 @@ const ProductAdd = () => {
             reader.onloadend = () => {
                 const file = reader.result;
                 setLoading(true);
-                axios.post('http://localhost:5000/products/addProduct', {name, price, description, file, category}, {headers: { 'Content-Type': 'application/json' }})
+                addProduct(name, price, description, file, category)
                     .then(res => {console.log(res); setLoading(false); history.push('/manage')})
-                    .catch(err => console.log(err))  
+                    .catch(err => console.log(err)) 
             };
         }
 

@@ -47,20 +47,11 @@ const Filters = (props: Props) => {
             search: { value: string };
         };
         const query = target.search.value;
-        console.log(query)
     };
 
     const handleFilterChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
         setFilter(event.target.value as string);
     };
-
-    useEffect(() => {
-        console.log(sort);
-    }, [sort]);
-
-    useEffect(() => {
-        console.log(filter);
-    }, [filter]);
 
     return (
         <div>

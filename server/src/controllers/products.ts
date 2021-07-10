@@ -19,6 +19,7 @@ cloudinary.config({
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
     const {sort, filter} = req.query;
     let query: Query | EmptyQuery = {};
+    let sortQuery = {};
     switch(filter){
         case 'all':
             query = {};
@@ -35,7 +36,23 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
         default:
             break;
     };
-    const fetchedProducts = await Products.find(query).sort({});
+    switch(sort){
+        case 'none':
+            sortQuery = {};
+            break;
+        case 'alpha':
+            sortQuery = {'name': 1};
+            break;
+        case 'price': 
+            sortQuery = {'price': -1};
+            break;
+        case 'popularity':
+            sortQuery = {'rating': 1};
+            break;
+        default:
+            break;
+    };
+    const fetchedProducts = await Products.find(query).sort(sortQuery);
     const numberOfProducts: number = await Products.countDocuments();
     const numberOfPages: number = Math.ceil(numberOfProducts / 6);
     res.json({message: "Success fetch", fetchedProducts, numberOfPages});
