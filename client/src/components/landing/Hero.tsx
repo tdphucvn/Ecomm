@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import { Typography, makeStyles, Button } from '@material-ui/core';
-import hero1 from '../../images/hero1.png';
-
 
 const useStyles = makeStyles((theme) => ({
     heroContainer: {
@@ -49,7 +47,6 @@ const Hero = () => {
                 </div>
             </div>
             <div className={classes.slider}>
-                <img src={hero1} alt="" />
             </div>
         </div>
     )

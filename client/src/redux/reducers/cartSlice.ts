@@ -16,11 +16,13 @@ type Item = {
 
 interface CartState {
   items: Array<Item>;
+  total: number;
   count: number;
 };
 
 const initialState: CartState = {
   items: [],
+  total: 0,
   count: 0,
 };
 
@@ -30,10 +32,14 @@ export const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       state.count++;
-      state.items.push(action.payload)
+      state.total = state.total + action.payload.price;
+      state.items.push(action.payload);
     },
-    removeFromCart: (state) => {
-      
+    removeFromCart: (state, action) => {
+      const newItemsArray = state.items.filter(item => item._id !== action.payload.id);
+      state.items = newItemsArray;
+      state.count = newItemsArray.length;
+      state.total = state.total - action.payload.price * action.payload.amount;
     },
     increaseAmount: (state) => {
 

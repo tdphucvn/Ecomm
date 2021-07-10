@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'none'
     },
     imageContainer: {
-        minWidth: 450,
-        height: 500,
+        minWidth: 350,
+        height: 450,
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     productsDetails: {
-        minWidth: 450,
+        minWidth: 350,
         flex: 2,
         display: 'flex',
         flexDirection: 'column',
