@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as productsAPI from '../../api/products';
 
 type Query = {

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 
-export const addProduct = async (name: string, price: number, description: string, file: string  | ArrayBuffer, category: string) => {
-    return await axios.post('http://localhost:5000/products/addProduct', {name, price, description, file, category} ,{headers: { 'Content-Type': 'application/json' }});
+export const addProduct = async (name: string, price: number, description: string, file: string  | ArrayBuffer, category: string, accessToken: string) => {
+    return await axios.post('http://localhost:5000/products/addProduct', {name, price, description, file, category} ,{headers: { ContentType: 'application/json', Authorization: `Bearer ${accessToken}` }});
 };
 
 export const getProducts = async (sortState: string, filterState: string) => {

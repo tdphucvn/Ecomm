@@ -11,7 +11,7 @@ interface Authenticate {
     loading: boolean;
     authenticated: boolean;
     admin: boolean;
-    accessToken: Array<string>;
+    accessToken: string;
     user: Array<User>;
 };
 
@@ -36,7 +36,7 @@ const initialState: Authenticate = {
     loading: false,
     authenticated: false,
     admin: false,
-    accessToken: [],
+    accessToken: '',
     user: []
 };
 
@@ -114,7 +114,7 @@ export const authenticateSlice = createSlice({
             state.authenticated = false;
             state.admin = false;
             state.user = [];
-            state.accessToken = [];
+            state.accessToken = '';
         });
     },
 });

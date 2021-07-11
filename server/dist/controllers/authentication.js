@@ -110,11 +110,6 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
             case 5:
                 _a.sent();
                 token = assigningTokens(user, res);
-                res.cookie('refreshtoken', token, {
-                    httpOnly: true,
-                    path: '/user/refresh_token',
-                    maxAge: 7 * 24 * 60 * 60 * 1000
-                });
                 res.json({ message: 'Thank your for signing up', auth: true, user: user, token: token });
                 return [3, 7];
             case 6:
@@ -133,7 +128,6 @@ var logoutRequest = function (req, res) { return __awaiter(void 0, void 0, void 
         res.clearCookie('authorization');
         res.clearCookie('refreshToken');
         res.clearCookie('userSession');
-        console.log('Server logout');
         res.status(200).json({ message: 'Logged Out' });
         return [2];
     });
@@ -142,7 +136,7 @@ exports.logoutRequest = logoutRequest;
 var assigningTokens = function (user, response) {
     var accessSecretToken = "" + process.env.ACCESS_TOKEN_SECRET;
     var refreshSecretToken = "" + process.env.REFRESH_TOKEN_SECRET;
-    var newAccessToken = jsonwebtoken_1.default.sign({ user: user }, accessSecretToken, { expiresIn: '30min' });
+    var newAccessToken = jsonwebtoken_1.default.sign({ user: user }, accessSecretToken, { expiresIn: '30sec' });
     var newRefreshToken = jsonwebtoken_1.default.sign({ user: user }, refreshSecretToken, { expiresIn: '1day' });
     response.cookie('authorization', newAccessToken, { httpOnly: true });
     response.cookie('refreshToken', newRefreshToken, { httpOnly: true });

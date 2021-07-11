@@ -5,6 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { deleteProductsRequest } from '../../redux/reducers/productsSlice';
+import { updateCart } from '../../redux/reducers/cartSlice';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -30,13 +31,13 @@ const Manage = () => {
         if(productsIDDelete.length === 0) { alert('You have not chosen any product.'); return }
         setLoading(true);
         dispatch(deleteProductsRequest(productsIDDelete))
-            .then(res => console.log(res))
+            .then(res => {
+                console.log(res);
+                dispatch(updateCart(res.payload));
+            })
             .then(() => setTimeout(() => setLoading(false), 500));
     };
-
-    useEffect(() => {
-        console.log(products);
-    }, [products]);
+    
 
     return (
         <div>

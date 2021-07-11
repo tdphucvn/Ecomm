@@ -54,10 +54,12 @@ const DisplayProducts = (props: Props) => {
     const { admin } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
+        console.log('state')
         setLoading(true);
         const { sortState, filterState } = props;
         dispatch(getProductsRequest({sortState, filterState}))
             .then(res => {
+                console.log(res);
                 setLoading(false);
             });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,7 +74,7 @@ const DisplayProducts = (props: Props) => {
         setProductsIDDelete((currentArr) => (currentArr.filter(id => id !== e.target.value)));
     };
 
-    if(products.length !== 0) {
+    if(products && products.length !== 0) {
         return (
             <Grid container spacing={3} className={classes.productsContainer}>
             { products.map(product => (
@@ -101,7 +103,7 @@ const DisplayProducts = (props: Props) => {
             )) }
             </Grid>
         );
-    } else if(!loading && products.length === 0) {
+    } else if(!loading && products && products.length === 0) {
         return (
             <div className={classes.loadingContainer}>
                 <CircularProgress />

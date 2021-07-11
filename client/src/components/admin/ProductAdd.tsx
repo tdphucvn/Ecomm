@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import { Typography, makeStyles, TextField, Select, MenuItem, Button, FormControl, InputLabel, CircularProgress } from '@material-ui/core';
-import axios from 'axios';
+import { makeStyles, TextField, Select, MenuItem, Button, FormControl, InputLabel, CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 import { addProduct } from '../../api/products';
 
@@ -59,6 +60,7 @@ const ProductAdd = () => {
     const [category, setCategory] = useState<string>('electronics')
     const [imageFile, setImageFile] = useState<File | null>(null)
     const history = useHistory();
+    const { accessToken } = useSelector((state: RootState) => state.auth);
 
     const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files !== null) {
@@ -92,7 +94,7 @@ const ProductAdd = () => {
             reader.onloadend = () => {
                 const file = reader.result;
                 setLoading(true);
-                addProduct(name, price, description, file, category)
+                addProduct(name, price, description, file, category, accessToken)
                     .then(res => {console.log(res); setLoading(false); history.push('/manage')})
                     .catch(err => console.log(err)) 
             };

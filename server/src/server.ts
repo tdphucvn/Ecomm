@@ -10,9 +10,11 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-import itemsRoute from './routes/products';
+import productsRoute from './routes/products';
 import contactRoute from './routes/contact';
 import authenticationRoute from './routes/authentication';
+import productsAdminRoute from './routes/admin/productsAdmin';
+
 
 const app: Application = express();
 
@@ -21,8 +23,8 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 
-
-app.use('/products', itemsRoute);
+app.use('/products', productsRoute);
+app.use('/products', productsAdminRoute);
 app.use('/contact', contactRoute);
 app.use('/authentication', authenticationRoute);
 

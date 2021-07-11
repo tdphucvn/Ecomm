@@ -44,12 +44,6 @@ export const registerRequest = async (req: Request, res: Response): Promise<void
 
         const token = assigningTokens(user, res);
 
-        res.cookie('refreshtoken', token, {
-            httpOnly: true,
-            path: '/user/refresh_token',
-            maxAge: 7*24*60*60*1000 // 7d
-        });
-
         res.json({message: 'Thank your for signing up', auth: true, user, token});
     } catch (error) {
         res.status(400).json({message: error.message});
@@ -61,15 +55,13 @@ export const logoutRequest = async (req: Request, res: Response): Promise<void> 
     res.clearCookie('refreshToken');
     res.clearCookie('userSession');
 
-    console.log('Server logout');
-
     res.status(200).json({message: 'Logged Out'});
 };
 
 const assigningTokens = (user: IUser, response: Response) => {
     const accessSecretToken: string = `${process.env.ACCESS_TOKEN_SECRET}`;
     const refreshSecretToken: string = `${process.env.REFRESH_TOKEN_SECRET}`;
-    const newAccessToken: string = jwt.sign({ user }, accessSecretToken, {expiresIn: '30min'}); //Creating an access token with JWT
+    const newAccessToken: string = jwt.sign({ user }, accessSecretToken, {expiresIn: '30sec'}); //Creating an access token with JWT
     const newRefreshToken: string = jwt.sign({ user }, refreshSecretToken, {expiresIn: '1day'}); //Creating a refresh token with JWT
     
     response.cookie('authorization', newAccessToken, {httpOnly: true}); // Using cookie to store Access token

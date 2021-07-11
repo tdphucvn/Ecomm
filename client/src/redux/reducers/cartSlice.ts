@@ -41,9 +41,19 @@ export const cartSlice = createSlice({
       state.count = newItemsArray.length;
       state.total = state.total - action.payload.price * action.payload.amount;
     },
+    updateCart: (state, action) => {
+      const removedProducts = action.payload.data.arrayOfProductsIDs;
+      console.log(removedProducts);
+      let productsInCart = state.items;
+      removedProducts.forEach((removedProductId: string) => {
+        const updatedProductsInCart = productsInCart.filter(product => product._id !== removedProductId)
+        productsInCart = updatedProductsInCart;
+      });
+      state.items = productsInCart;
+      state.count = productsInCart.length;
+    },
   },
-})
-
+});
 // Action creators are generated for each case reducer function
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCart } = cartSlice.actions;
 export default cartSlice.reducer;
