@@ -10,3 +10,23 @@ export const getProducts = async (sortState: string, filterState: string) => {
         .then(res => res.data.fetchedProducts)
         .catch(err => err.response.message);
 };
+
+export const deleteProducts = async (productsIds: Array<string>) => {
+    return await axios.post('http://localhost:5000/products/delete', {products: productsIds}, {headers: { 'Content-Type': 'application/json' }})
+        .then(res => ({
+            data: res.data,
+            status: res.status,
+        }))
+        .catch(error => {
+            if(error.response) {
+            return ({
+                data: error.response.data,
+                status: error.response.status,
+            });
+            } else if (error.request) {
+            throw new Error(error.request);
+            } else {
+            throw new Error(error.message);
+            };
+        });
+};

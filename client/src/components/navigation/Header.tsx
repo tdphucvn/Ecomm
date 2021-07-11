@@ -49,12 +49,12 @@ const useStyles = makeStyles((theme) => ({
     },
     contactContainer: {
         display: 'flex',
-        flex: 1,
+        flex: 1.3,
         alignItems: 'center',
         justifyContent: 'space-between',  
     },
     growContainer: {
-        flexGrow: 2, 
+        flexGrow: 3, 
     },
     heroContainer: {
         background: '#F2FBFF',
@@ -131,16 +131,14 @@ const Header = () => {
             <div className={classes.sumBar}>
                 <div className={classes.contactContainer}>
                     <Typography>+420•123456789</Typography>
-                    <Typography>•</Typography>
-                    <Typography><a href="mailto:ecomm@gmail.com">ecomm@gmail.com</a></Typography>
+                    <Typography> • </Typography>
+                    <Typography><a href="mailto:ecomm@gmail.com"> ecomm@gmail.com </a></Typography>
                 </div>
                 <div className={classes.growContainer}></div>
                 <div className={classes.contactContainer}>
                     <Typography component="a" href="/contact">CONTACT US</Typography>
                     <Typography>•</Typography>
-                    <Typography component="a" href="/track">TRACK ORDER</Typography>
-                    <Typography>•</Typography>
-                    <Typography component="a" href="/account">ACCOUNT</Typography>
+                    <Typography component="a" href="/account">YOUR ORDERS</Typography>
                 </div>
             </div>
             <div className={classes.heroContainer}>

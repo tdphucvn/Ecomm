@@ -41,15 +41,9 @@ export const cartSlice = createSlice({
       state.count = newItemsArray.length;
       state.total = state.total - action.payload.price * action.payload.amount;
     },
-    increaseAmount: (state) => {
-
-    },
-    decreaseAmount: (state) => {
-
-    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToCart, removeFromCart, increaseAmount, decreaseAmount } = cartSlice.actions;
+export const { addToCart, removeFromCart } = cartSlice.actions;
 export default cartSlice.reducer;

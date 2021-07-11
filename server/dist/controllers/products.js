@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addProduct = exports.postSearchItem = exports.getCertainItemDetails = exports.getProducts = void 0;
+exports.deleteProducts = exports.addProduct = exports.postSearchItem = exports.getCertainItemDetails = exports.getProducts = void 0;
 var Products_1 = __importDefault(require("../model/Products"));
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
@@ -131,7 +131,6 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 1:
                 uploadResponse = _b.sent();
                 url = uploadResponse.url, public_id = uploadResponse.public_id;
-                console.log(description);
                 newProduct = new Products_1.default({
                     name: name,
                     price: parseInt(price),
@@ -159,3 +158,60 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.addProduct = addProduct;
+var deleteProducts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var arrayOfProductsIDs_1, arrayOfProducts_1, error;
+    return __generator(this, function (_a) {
+        try {
+            arrayOfProductsIDs_1 = req.body.products;
+            arrayOfProducts_1 = [];
+            error = arrayOfProductsIDs_1.forEach(function (productId, index) { return __awaiter(void 0, void 0, void 0, function () {
+                var product, imageId, error_2;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 4, , 5]);
+                            return [4, Products_1.default.findById(productId)];
+                        case 1:
+                            product = _a.sent();
+                            if (product === null)
+                                throw Error('Item is not in the database');
+                            if (!(product !== null)) return [3, 3];
+                            arrayOfProducts_1.push(product);
+                            imageId = product.image.public_id;
+                            cloudinary.uploader.destroy(imageId, function (err, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+                                if (err) {
+                                    throw err;
+                                }
+                                ;
+                                console.log(res);
+                                return [2];
+                            }); }); });
+                            return [4, product.remove()];
+                        case 2:
+                            _a.sent();
+                            _a.label = 3;
+                        case 3:
+                            if (index == arrayOfProductsIDs_1.length - 1) {
+                                res.json({ message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs_1 });
+                                return [2];
+                            }
+                            ;
+                            return [3, 5];
+                        case 4:
+                            error_2 = _a.sent();
+                            res.status(400).json({ message: error_2.message });
+                            return [2];
+                        case 5: return [2];
+                    }
+                });
+            }); });
+        }
+        catch (error) {
+            console.log(error);
+            res.status(400).json({ message: error });
+        }
+        ;
+        return [2];
+    });
+}); };
+exports.deleteProducts = deleteProducts;

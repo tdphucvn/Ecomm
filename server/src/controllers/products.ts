@@ -75,8 +75,6 @@ export const addProduct = async (req: Request, res: Response): Promise<void> => 
         });
         const { url, public_id } = uploadResponse;
 
-        console.log(description);
-
         const newProduct: IProduct = new Products({
             name,
             price: parseInt(price),
@@ -94,5 +92,34 @@ export const addProduct = async (req: Request, res: Response): Promise<void> => 
     } catch (error) {
         console.error(error);
         res.status(500).json({ err: 'Something went wrong' });
+    };
+};
+
+export const deleteProducts = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const arrayOfProductsIDs = req.body.products;
+        let arrayOfProducts: Array<IProduct> = [];
+        const error = arrayOfProductsIDs.forEach(async (productId: string, index: number) => {
+            try {
+                const product: IProduct | null = await Products.findById(productId);
+                if(product === null) throw Error('Item is not in the database')
+                if(product !== null) {
+                    arrayOfProducts.push(product);
+                    const { image: { public_id: imageId } } = product;
+                    cloudinary.uploader.destroy(imageId, async (err: any, res: any) => {if(err){throw err}; console.log(res)});
+                    await product.remove();
+                }
+                if(index == arrayOfProductsIDs.length - 1) {
+                    res.json({message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs});
+                    return;
+                };
+            } catch (error) {
+                res.status(400).json({message: error.message})
+                return;
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message: error});
     };
 };

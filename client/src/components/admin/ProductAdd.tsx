@@ -82,8 +82,6 @@ const ProductAdd = () => {
             price: { value: number };
             description: { value: string };
         };
-
-        console.log(target.name.value, target.price.value, target.description.value, imageFile, category);
         const name = target.name.value;
         const price = target.price.value;
         const description = target.description.value;

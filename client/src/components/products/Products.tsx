@@ -12,8 +12,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-    sortMethod: string | undefined
-}
+    productsID: Array<string>;
+    setProductsID: React.Dispatch<React.SetStateAction<string[]>>;
+};
 
 const Products = (props: Props) => {
     const classes = useStyles();
@@ -23,7 +24,7 @@ const Products = (props: Props) => {
     return (
         <div className={classes.container}>
             <Filters sortState={sort} sortStateFunction={setSort} filterState={filter} filterStateFunction={setFilter} />
-            <DisplayProducts sortState={sort} filterState={filter}/>
+            <DisplayProducts sortState={sort} filterState={filter} productsID={props.productsID} setProductsID={props.setProductsID} />
         </div>
     )
 }

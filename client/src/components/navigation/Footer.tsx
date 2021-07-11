@@ -26,23 +26,6 @@ const useStyles = makeStyles((theme) => ({
             },
         }
     },
-    productsContainer: {
-        flex: 1,
-        '& ul':{
-            listStyle: 'none', 
-            padding: 0,
-            '& li': {
-                margin: '5px 0',
-            }, 
-            '& a': {
-                textDecoration: 'none',
-                color: 'black',
-                '&:hover': {
-                    color: '#587D9F'
-                }, 
-            },
-        }
-    },
     contactContainer: {
         flex: 1,
         '& ul':{
@@ -108,14 +91,6 @@ const Footer = () => {
                             <li><Typography component="a" href="#" gutterBottom={true}>On the Edge</Typography></li>
                             <li><Typography component="a" href="#" gutterBottom={true}>Master of the Night</Typography></li>
                             <li><Typography component="a" href="#" gutterBottom={true}>Never More</Typography></li>
-                        </ul>
-                    </div>
-                    <div className={classes.productsContainer}>
-                        <Typography variant="h5" gutterBottom={true}>Products</Typography>
-                        <ul>
-                            <li><Typography component="a" href="#" gutterBottom={true}>Home Decor</Typography></li>
-                            <li><Typography component="a" href="#" gutterBottom={true}>Electronics</Typography></li>
-                            <li><Typography component="a" href="#" gutterBottom={true}>Shop Grocery</Typography></li>
                         </ul>
                     </div>
                     <div className={classes.contactContainer}>

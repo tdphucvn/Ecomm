@@ -10,4 +10,5 @@ router.get('/', products_1.getProducts);
 router.get('/:id', products_1.getCertainItemDetails);
 router.post('/search', products_1.postSearchItem);
 router.post('/addProduct', products_1.addProduct);
+router.post('/delete', products_1.deleteProducts);
 exports.default = router;
