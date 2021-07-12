@@ -54,7 +54,6 @@ const DisplayProducts = (props: Props) => {
     const { admin } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        console.log('state')
         setLoading(true);
         const { sortState, filterState } = props;
         dispatch(getProductsRequest({sortState, filterState}))
@@ -106,7 +105,7 @@ const DisplayProducts = (props: Props) => {
     } else if(!loading && products && products.length === 0) {
         return (
             <div className={classes.loadingContainer}>
-                <CircularProgress />
+                <Typography>No products founded</Typography>
             </div>
         )
     } else {

@@ -48,10 +48,11 @@ cloudinary.config({
     api_secret: process.env.CLOUD_API_SECRET_KEY,
 });
 var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, sort, filter, query, sortQuery, fetchedProducts, numberOfProducts, numberOfPages;
+    var _a, sort, filter, query, sortQuery, fetchedProducts, numberOfProducts, numberOfPages, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
+                _b.trys.push([0, 3, , 4]);
                 _a = req.query, sort = _a.sort, filter = _a.filter;
                 query = {};
                 sortQuery = {};
@@ -97,6 +98,13 @@ var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 numberOfProducts = _b.sent();
                 numberOfPages = Math.ceil(numberOfProducts / 6);
                 res.json({ message: "Success fetch", fetchedProducts: fetchedProducts, numberOfPages: numberOfPages });
+                return [3, 4];
+            case 3:
+                error_1 = _b.sent();
+                console.log(error_1);
+                return [3, 4];
+            case 4:
+                ;
                 return [2];
         }
     });
@@ -119,7 +127,7 @@ var postSearchItem = function (req, res) { return __awaiter(void 0, void 0, void
 }); };
 exports.postSearchItem = postSearchItem;
 var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, price, description, file, category, uploadResponse, url, public_id, newProduct, savedProduct, error_1;
+    var _a, name, price, description, file, category, uploadResponse, url, public_id, newProduct, savedProduct, accessToken, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -144,11 +152,16 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4, newProduct.save()];
             case 2:
                 savedProduct = _b.sent();
-                res.json({ message: 'Product added', savedProduct: savedProduct });
+                accessToken = req.accessToken;
+                if (!accessToken) {
+                    res.json({ message: 'Product added', savedProduct: savedProduct });
+                    return [2];
+                }
+                res.json({ message: 'Product added', savedProduct: savedProduct, accessToken: accessToken });
                 return [3, 4];
             case 3:
-                error_1 = _b.sent();
-                console.error(error_1);
+                error_2 = _b.sent();
+                console.error(error_2);
                 res.status(500).json({ err: 'Something went wrong' });
                 return [3, 4];
             case 4:
@@ -165,7 +178,7 @@ var deleteProducts = function (req, res) { return __awaiter(void 0, void 0, void
             arrayOfProductsIDs_1 = req.body.products;
             arrayOfProducts_1 = [];
             error = arrayOfProductsIDs_1.forEach(function (productId, index) { return __awaiter(void 0, void 0, void 0, function () {
-                var product, imageId, error_2;
+                var product, imageId, error_3;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -191,15 +204,17 @@ var deleteProducts = function (req, res) { return __awaiter(void 0, void 0, void
                             _a.sent();
                             _a.label = 3;
                         case 3:
+                            console.log(index, arrayOfProductsIDs_1, arrayOfProductsIDs_1.length - 1);
                             if (index == arrayOfProductsIDs_1.length - 1) {
+                                console.log('Deleted everything');
                                 res.json({ message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs_1 });
                                 return [2];
                             }
                             ;
                             return [3, 5];
                         case 4:
-                            error_2 = _a.sent();
-                            res.status(400).json({ message: error_2.message });
+                            error_3 = _a.sent();
+                            res.status(400).json({ message: error_3.message });
                             return [2];
                         case 5: return [2];
                     }

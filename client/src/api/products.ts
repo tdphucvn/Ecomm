@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 export const addProduct = async (name: string, price: number, description: string, file: string  | ArrayBuffer, category: string, accessToken: string) => {
-    return await axios.post('http://localhost:5000/products/addProduct', {name, price, description, file, category} ,{headers: { ContentType: 'application/json', Authorization: `Bearer ${accessToken}` }});
+    return await axios.post('http://localhost:5000/products/addProduct', {name, price, description, file, category} ,{headers: { ContentType: 'application/json', Authorization: `Bearer ${accessToken}` }, withCredentials: true});
 };
 
 export const getProducts = async (sortState: string, filterState: string) => {
@@ -11,8 +11,8 @@ export const getProducts = async (sortState: string, filterState: string) => {
         .catch(err => err.response.message);
 };
 
-export const deleteProducts = async (productsIds: Array<string>) => {
-    return await axios.post('http://localhost:5000/products/delete', {products: productsIds}, {headers: { 'Content-Type': 'application/json' }})
+export const deleteProducts = async (productsIds: Array<string>, accessToken: string) => {
+    return await axios.post('http://localhost:5000/products/delete', {products: productsIds}, {headers: { ContentType: 'application/json', Authorization: `Bearer ${accessToken}` }, withCredentials: true})
         .then(res => ({
             data: res.data,
             status: res.status,

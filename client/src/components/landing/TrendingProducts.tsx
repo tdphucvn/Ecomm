@@ -3,6 +3,9 @@ import { Typography, makeStyles, Grid, Paper, Button } from '@material-ui/core';
 import chair from '../../images/chair.png';
 import grocery from '../../images/grocery.png';
 import macbook from '../../images/macbook.png';
+import { Link as RouterLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TrendingProducts = () => {
     const classes = useStyles();
+    const { admin } = useSelector((state: RootState) => state.auth);
 
     return (
         <div className={classes.container}>
@@ -51,7 +55,7 @@ const TrendingProducts = () => {
                         <div className={classes.collectionDescription}>
                             <Typography variant="h5">Home Decor</Typography>
                             <Typography paragraph color="textSecondary">Complete your space with modern decor</Typography>
-                            <Button className={classes.collectionShopNowBtn} style={{borderRadius: 0}}>Shop Now</Button>
+                            <Button className={classes.collectionShopNowBtn} style={{borderRadius: 0}} component={RouterLink} to={admin ? '/manage?filter=homeDecor' : '/products?filter=homeDecor'}>Shop Now</Button>
                         </div>
                     </Paper>
                 </Grid>
@@ -63,7 +67,7 @@ const TrendingProducts = () => {
                         <div className={classes.collectionDescription}>
                             <Typography variant="h5">Electronics</Typography>
                             <Typography paragraph color="textSecondary">Ramp up your wardrobe with the latest trend</Typography>
-                            <Button className={classes.collectionShopNowBtn} style={{borderRadius: 0}}>Shop Now</Button>
+                            <Button className={classes.collectionShopNowBtn} style={{borderRadius: 0}} component={RouterLink} to={admin ? '/manage?filter=electronics' : '/products?filter=electronics'}>Shop Now</Button>
                         </div>
                     </Paper>
                 </Grid>
@@ -75,7 +79,7 @@ const TrendingProducts = () => {
                         <div className={classes.collectionDescription}>
                             <Typography variant="h5">Shop Grocery</Typography>
                             <Typography paragraph color="textSecondary">Ramp up your wardrobe with the latest trend</Typography>
-                            <Button className={classes.collectionShopNowBtn} style={{borderRadius: 0}}>Shop Now</Button>
+                            <Button className={classes.collectionShopNowBtn} style={{borderRadius: 0}} component={RouterLink} to={admin ? '/manage?filter=grocery' : '/products?filter=grocery'}>Shop Now</Button>
                         </div>
                     </Paper>
                 </Grid>

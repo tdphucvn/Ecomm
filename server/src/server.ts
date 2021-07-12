@@ -18,6 +18,9 @@ import productsAdminRoute from './routes/admin/productsAdmin';
 
 const app: Application = express();
 
+app.use(cookieParser());
+
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
@@ -28,7 +31,6 @@ app.use('/products', productsAdminRoute);
 app.use('/contact', contactRoute);
 app.use('/authentication', authenticationRoute);
 
-app.use(cookieParser());    
 
 const uri: string = `${process.env.DB_CONNECTION}`;
 const options = { useUnifiedTopology: true , useNewUrlParser: true };

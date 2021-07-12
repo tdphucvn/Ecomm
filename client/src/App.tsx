@@ -17,8 +17,10 @@ import Manage from './components/admin/Manage';
 import ProductEdit from './components/admin/ProductEdit';
 import ProductAdd from './components/admin/ProductAdd';
 import Cart from './components/cart/Cart';
+import Contact from './components/contact/Contact';
 
 const App: FC = () => {
+
     return (
         <>
             <Router>
@@ -32,6 +34,7 @@ const App: FC = () => {
                     <Route exact path="/products" component={Products}/>
                     <Route exact path="/product/:id" component={Product} />
                     <Route exact path="/cart" component={Cart} />
+                    <Route exact path="/contact" component={Contact} />
                     <RestrictedRoute path="/authentication" component={Authentication} />
                     <AdminRoute exact path="/manage" component={Manage}/>
                     <AdminRoute exact path="/manage/add" component={ProductAdd}/>

@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import { Typography, makeStyles, Button } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const useStyles = makeStyles((theme) => ({
     heroContainer: {
@@ -36,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Hero = () => {
     const classes = useStyles();
+    const { admin } = useSelector((state: RootState) => state.auth);
 
     return (
         <div className={classes.heroContainer}>
@@ -43,7 +47,7 @@ const Hero = () => {
                 <Typography variant="h4" gutterBottom={true} style={{width: '40%'}}>Shop all brands and essentials, Now with huge discounts.</Typography>
                 <Typography variant="body1">Coming to your doorstep with a huge discount.</Typography>
                 <div className={classes.btnShopNow}>
-                    <Button color="primary" variant="contained" component="a" href="/products">Shop Now</Button>
+                    <Button color="primary" variant="contained" component={RouterLink} to={admin ? '/manage' : 'products'}>Shop Now</Button>
                 </div>
             </div>
             <div className={classes.slider}>

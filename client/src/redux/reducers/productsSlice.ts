@@ -6,6 +6,11 @@ type Query = {
     filterState: string;
 };
 
+type DeleteObject = {
+    productsIds: Array<string>;
+    accessToken: string;
+}
+
 const initialState = {
     products: []
 };
@@ -26,10 +31,12 @@ export const getProductsRequest = createAsyncThunk(
 
 export const deleteProductsRequest = createAsyncThunk(
     'products/deleteProductsStatus',
-    async(productsIds: Array<string>, { rejectWithValue }) => {
+    async(productObject: DeleteObject, { rejectWithValue }) => {
         try {
-            const response = await productsAPI.deleteProducts(productsIds);
-            console.log(response);
+            const {productsIds, accessToken} = productObject;
+            const response = await productsAPI.deleteProducts(productsIds, accessToken);
+            if(response.status === 400) return rejectWithValue({message: response.data.message, status: response.status});
+            if(response.status === 401) return rejectWithValue({message: response.data.message, status: response.status});
             return response;
         } catch (error) {
             return rejectWithValue(error);
@@ -58,11 +65,11 @@ export const productsSlice = createSlice({
                 const newProduct = currentArrayOfProducts.find(product => product._id === id);
                 newArrayOfProducts.push(newProduct);
             });
-
-            console.log(newArrayOfProducts);
-            console.log(newArrayOfProductsIDs);
             state.products = newArrayOfProducts;
         });
+        builder.addCase(deleteProductsRequest.rejected, (state, action) => {
+            console.log('rejected');
+        })
     },
 });
 

@@ -17,45 +17,49 @@ cloudinary.config({
 
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
-    const {sort, filter} = req.query;
-    let query: Query | EmptyQuery = {};
-    let sortQuery = {};
-    switch(filter){
-        case 'all':
-            query = {};
-            break;
-        case 'electronics':
-            query = {category: 'electronics'};
-            break;
-        case 'homeDecor': 
-            query = {category: 'homeDecor'};
-            break;
-        case 'grocery':
-            query = {category: 'grocery'};
-            break;
-        default:
-            break;
+    try {
+        const {sort, filter} = req.query;
+        let query: Query | EmptyQuery = {};
+        let sortQuery = {};
+        switch(filter){
+            case 'all':
+                query = {};
+                break;
+            case 'electronics':
+                query = {category: 'electronics'};
+                break;
+            case 'homeDecor': 
+                query = {category: 'homeDecor'};
+                break;
+            case 'grocery':
+                query = {category: 'grocery'};
+                break;
+            default:
+                break;
+        };
+        switch(sort){
+            case 'none':
+                sortQuery = {};
+                break;
+            case 'alpha':
+                sortQuery = {'name': 1};
+                break;
+            case 'price': 
+                sortQuery = {'price': -1};
+                break;
+            case 'popularity':
+                sortQuery = {'rating': 1};
+                break;
+            default:
+                break;
+        };
+        const fetchedProducts = await Products.find(query).sort(sortQuery);
+        const numberOfProducts: number = await Products.countDocuments();
+        const numberOfPages: number = Math.ceil(numberOfProducts / 6);
+        res.json({message: "Success fetch", fetchedProducts, numberOfPages});
+    } catch (error) {
+        console.log(error);  
     };
-    switch(sort){
-        case 'none':
-            sortQuery = {};
-            break;
-        case 'alpha':
-            sortQuery = {'name': 1};
-            break;
-        case 'price': 
-            sortQuery = {'price': -1};
-            break;
-        case 'popularity':
-            sortQuery = {'rating': 1};
-            break;
-        default:
-            break;
-    };
-    const fetchedProducts = await Products.find(query).sort(sortQuery);
-    const numberOfProducts: number = await Products.countDocuments();
-    const numberOfPages: number = Math.ceil(numberOfProducts / 6);
-    res.json({message: "Success fetch", fetchedProducts, numberOfPages});
 };
 
 export const getCertainItemDetails = async (req: Request, res: Response): Promise<void> => {
@@ -67,7 +71,7 @@ export const postSearchItem = async (req: Request, res: Response): Promise<void>
     res.json({search:'Search Item'});
 };
 
-export const addProduct = async (req: Request, res: Response): Promise<void> => {
+export const addProduct = async (req: Request | any, res: Response): Promise<void> => {
     try {
         const { name, price, description, file, category } = req.body;
         const uploadResponse = await cloudinary.uploader.upload(file, {
@@ -87,8 +91,9 @@ export const addProduct = async (req: Request, res: Response): Promise<void> => 
         });
 
         const savedProduct = await newProduct.save();
-
-        res.json({message: 'Product added', savedProduct});    
+        const accessToken = req.accessToken;
+        if(!accessToken) {res.json({message: 'Product added', savedProduct}); return;}
+        res.json({message: 'Product added', savedProduct, accessToken});    
     } catch (error) {
         console.error(error);
         res.status(500).json({ err: 'Something went wrong' });
@@ -109,7 +114,9 @@ export const deleteProducts = async (req: Request, res: Response): Promise<void>
                     cloudinary.uploader.destroy(imageId, async (err: any, res: any) => {if(err){throw err}; console.log(res)});
                     await product.remove();
                 }
+                console.log(index, arrayOfProductsIDs, arrayOfProductsIDs.length - 1);
                 if(index == arrayOfProductsIDs.length - 1) {
+                    console.log('Deleted everything');
                     res.json({message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs});
                     return;
                 };

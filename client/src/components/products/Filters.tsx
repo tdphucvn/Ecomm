@@ -37,6 +37,15 @@ const Filters = (props: Props) => {
     const [filter, setFilter] = [props.filterState, props.filterStateFunction];
     const dispatch = useDispatch<AppDispatch>();
 
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    const filterParams = params.get('filter');
+    
+    useEffect(() => {
+        if(filterParams === null) return;
+        setFilter(filterParams);
+    }, [filterParams, setFilter]);
+
     const handleSortChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
         setSort(event.target.value as string);
     };

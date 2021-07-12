@@ -131,7 +131,7 @@ const ProductAdd = () => {
                             <MenuItem value="grocery">Grocery</MenuItem>
                         </Select>
                     </FormControl>
-                    <Button variant="contained" color="primary" type="submit" className={classes.widthMargin}>{loading ? <CircularProgress color="secondary" /> : 'Save Changes' }</Button>
+                    <Button variant="contained" color="primary" type="submit" className={classes.widthMargin}>{loading ? <CircularProgress style={{color: 'white'}} /> : 'Save Changes' }</Button>
                 </div>
             </form>
         </div>

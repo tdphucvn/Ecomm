@@ -40,14 +40,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var User_1 = __importDefault(require("../model/User"));
 var authenticateAdmin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var accessTokenSecret, authHeader, cookies, accessToken, decoded, error_1, refreshToken, refreshTokenSecret, decoded, error_2;
+    var accessTokenSecret, userSession, authHeader, accessToken, decoded, error_1, refreshToken, refreshTokenSecret, decoded, newAccessToken, newRefreshToken, error1_1, _id, user;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 accessTokenSecret = "" + process.env.ACCESS_TOKEN_SECRET;
+                userSession = req.cookies.userSession;
                 authHeader = req.headers.authorization;
-                cookies = req.cookies;
                 if (!authHeader) {
                     res.status(401).json({ message: 'Unauthorized' });
                     return [2];
@@ -59,7 +60,13 @@ var authenticateAdmin = function (req, res, next) { return __awaiter(void 0, voi
                 return [4, jsonwebtoken_1.default.verify(accessToken, accessTokenSecret)];
             case 2:
                 decoded = _a.sent();
-                console.log(decoded, '2');
+                if (JSON.stringify(decoded.user) !== JSON.stringify(userSession)) {
+                    clearCookies(res);
+                    res.status(401).json({ message: 'Unauthorized' });
+                    return [2];
+                }
+                ;
+                req.decoded = decoded;
                 return [3, 8];
             case 3:
                 error_1 = _a.sent();
@@ -69,30 +76,64 @@ var authenticateAdmin = function (req, res, next) { return __awaiter(void 0, voi
                 refreshToken = req.cookies.refreshToken;
                 refreshTokenSecret = "" + process.env.REFRESH_TOKEN_SECRET;
                 if (refreshToken == null || refreshToken == '') {
+                    console.log('empty refresh token');
+                    clearCookies(res);
                     res.status(401).json({ message: 'Unauthorized' });
                     return [2];
                 }
                 return [4, jsonwebtoken_1.default.verify(refreshToken, refreshTokenSecret)];
             case 5:
                 decoded = _a.sent();
-                console.log(decoded, 45);
+                if (JSON.stringify(decoded.user) !== JSON.stringify(userSession)) {
+                    console.log('decoded and usersession');
+                    clearCookies(res);
+                    console.log(decoded, userSession);
+                    res.status(401).json({ message: 'Unauthorized' });
+                    return [2];
+                }
+                ;
+                newAccessToken = jsonwebtoken_1.default.sign({ user: userSession }, accessTokenSecret, { expiresIn: '10min' });
+                newRefreshToken = jsonwebtoken_1.default.sign({ user: userSession }, refreshTokenSecret, { expiresIn: '1day' });
+                req.accessToken = newAccessToken;
+                req.decoded = decoded;
+                res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
                 return [3, 7];
             case 6:
-                error_2 = _a.sent();
-                console.log(error_2);
-                console.log('error');
+                error1_1 = _a.sent();
                 res.clearCookie('authorization');
                 res.clearCookie('refreshToken');
                 res.clearCookie('userSession');
-                return [3, 7];
+                res.status(401).json({ message: 'Unauthorized' });
+                return [2];
             case 7:
                 ;
                 return [3, 8];
             case 8:
+                ;
+                _id = req.decoded.user._id;
+                return [4, User_1.default.findById(_id)];
+            case 9:
+                user = _a.sent();
+                if (user == null) {
+                    console.log('Null User');
+                    res.status(401).json({ message: 'Unauthorized' });
+                    return [2];
+                }
+                ;
+                if (!user.admin) {
+                    console.log('Not admin');
+                    res.status(401).json({ message: 'Unauthorized' });
+                    return [2];
+                }
                 ;
                 next();
                 return [2];
         }
     });
 }); };
+var clearCookies = function (res) {
+    res.clearCookie('authorization');
+    res.clearCookie('refreshToken');
+    res.clearCookie('userSession');
+};
 exports.default = authenticateAdmin;

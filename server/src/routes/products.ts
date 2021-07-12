@@ -6,7 +6,5 @@ import { getProducts, getCertainItemDetails, postSearchItem, addProduct, deleteP
 router.get('/', getProducts);
 router.get('/:id', getCertainItemDetails);
 router.post('/search', postSearchItem);
-// router.post('/addProduct', addProduct);
-// router.post('/delete', deleteProducts);
 
 export default router;
