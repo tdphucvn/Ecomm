@@ -87,6 +87,9 @@ export const authenticateSlice = createSlice({
     name: 'authenticate',
     initialState,
     reducers: {
+        updateAccessToken: (state, action) => {
+            state.accessToken = action.payload;
+        },
         unauthorized: (state) => {
             state.admin = false;
             state.authenticated = false;
@@ -126,5 +129,5 @@ export const authenticateSlice = createSlice({
     },
 });
 
-export const { unauthorized } = authenticateSlice.actions;
+export const { unauthorized, updateAccessToken } = authenticateSlice.actions;
 export default authenticateSlice.reducer;

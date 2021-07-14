@@ -63,8 +63,14 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
 };
 
 export const getCertainItemDetails = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
-    res.json({message: "Item Details not provided", id});
+    try {
+        const { id } = req.params;
+        const product = await Products.findById(id);
+        res.json({message: 'Item finded in DB', product})  
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message: 'Something went wrong'});
+    };
 };
 
 export const postSearchItem = async (req: Request, res: Response): Promise<void> => {
@@ -100,8 +106,9 @@ export const addProduct = async (req: Request | any, res: Response): Promise<voi
     };
 };
 
-export const deleteProducts = async (req: Request, res: Response): Promise<void> => {
+export const deleteProducts = async (req: Request | any, res: Response): Promise<void> => {
     try {
+        const accessToken = req.accessToken;
         const arrayOfProductsIDs = req.body.products;
         let arrayOfProducts: Array<IProduct> = [];
         const error = arrayOfProductsIDs.forEach(async (productId: string, index: number) => {
@@ -117,7 +124,8 @@ export const deleteProducts = async (req: Request, res: Response): Promise<void>
                 console.log(index, arrayOfProductsIDs, arrayOfProductsIDs.length - 1);
                 if(index == arrayOfProductsIDs.length - 1) {
                     console.log('Deleted everything');
-                    res.json({message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs});
+                    if(!accessToken) {res.json({message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs}); return;}
+                    res.json({message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs, accessToken});
                     return;
                 };
             } catch (error) {
@@ -128,5 +136,22 @@ export const deleteProducts = async (req: Request, res: Response): Promise<void>
     } catch (error) {
         console.log(error);
         res.status(400).json({message: error});
+    };
+};
+
+export const editProduct = async (req: Request | any, res: Response) => {
+    try {
+        const { productID, name, price, description, category } = req.body;
+        const product = await Products.findByIdAndUpdate(productID, {name, price, description, category}, (err, docs) => {
+            if(err) console.log(err);
+            else console.log('Updated user: ', docs);
+        });
+
+        const accessToken = req.accessToken;
+        if(!accessToken) {res.json({message: 'Succesfully updated', product}); return;}
+        res.json({message: 'Succesfully updated', product, accessToken});
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message: 'Product is not in the database'});
     };
 };

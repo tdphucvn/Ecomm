@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProducts = exports.addProduct = exports.postSearchItem = exports.getCertainItemDetails = exports.getProducts = void 0;
+exports.editProduct = exports.deleteProducts = exports.addProduct = exports.postSearchItem = exports.getCertainItemDetails = exports.getProducts = void 0;
 var Products_1 = __importDefault(require("../model/Products"));
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
@@ -111,11 +111,26 @@ var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0,
 }); };
 exports.getProducts = getProducts;
 var getCertainItemDetails = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id;
+    var id, product, error_2;
     return __generator(this, function (_a) {
-        id = req.params.id;
-        res.json({ message: "Item Details not provided", id: id });
-        return [2];
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                id = req.params.id;
+                return [4, Products_1.default.findById(id)];
+            case 1:
+                product = _a.sent();
+                res.json({ message: 'Item finded in DB', product: product });
+                return [3, 3];
+            case 2:
+                error_2 = _a.sent();
+                console.log(error_2);
+                res.status(400).json({ message: 'Something went wrong' });
+                return [3, 3];
+            case 3:
+                ;
+                return [2];
+        }
     });
 }); };
 exports.getCertainItemDetails = getCertainItemDetails;
@@ -127,7 +142,7 @@ var postSearchItem = function (req, res) { return __awaiter(void 0, void 0, void
 }); };
 exports.postSearchItem = postSearchItem;
 var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, price, description, file, category, uploadResponse, url, public_id, newProduct, savedProduct, accessToken, error_2;
+    var _a, name, price, description, file, category, uploadResponse, url, public_id, newProduct, savedProduct, accessToken, error_3;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -160,8 +175,8 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.json({ message: 'Product added', savedProduct: savedProduct, accessToken: accessToken });
                 return [3, 4];
             case 3:
-                error_2 = _b.sent();
-                console.error(error_2);
+                error_3 = _b.sent();
+                console.error(error_3);
                 res.status(500).json({ err: 'Something went wrong' });
                 return [3, 4];
             case 4:
@@ -172,13 +187,14 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.addProduct = addProduct;
 var deleteProducts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var arrayOfProductsIDs_1, arrayOfProducts_1, error;
+    var accessToken_1, arrayOfProductsIDs_1, arrayOfProducts_1, error;
     return __generator(this, function (_a) {
         try {
+            accessToken_1 = req.accessToken;
             arrayOfProductsIDs_1 = req.body.products;
             arrayOfProducts_1 = [];
             error = arrayOfProductsIDs_1.forEach(function (productId, index) { return __awaiter(void 0, void 0, void 0, function () {
-                var product, imageId, error_3;
+                var product, imageId, error_4;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -207,14 +223,18 @@ var deleteProducts = function (req, res) { return __awaiter(void 0, void 0, void
                             console.log(index, arrayOfProductsIDs_1, arrayOfProductsIDs_1.length - 1);
                             if (index == arrayOfProductsIDs_1.length - 1) {
                                 console.log('Deleted everything');
-                                res.json({ message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs_1 });
+                                if (!accessToken_1) {
+                                    res.json({ message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs_1 });
+                                    return [2];
+                                }
+                                res.json({ message: 'Deleted', arrayOfProductsIDs: arrayOfProductsIDs_1, accessToken: accessToken_1 });
                                 return [2];
                             }
                             ;
                             return [3, 5];
                         case 4:
-                            error_3 = _a.sent();
-                            res.status(400).json({ message: error_3.message });
+                            error_4 = _a.sent();
+                            res.status(400).json({ message: error_4.message });
                             return [2];
                         case 5: return [2];
                     }
@@ -230,3 +250,37 @@ var deleteProducts = function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); };
 exports.deleteProducts = deleteProducts;
+var editProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, productID, name, price, description, category, product, accessToken, error_5;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, productID = _a.productID, name = _a.name, price = _a.price, description = _a.description, category = _a.category;
+                return [4, Products_1.default.findByIdAndUpdate(productID, { name: name, price: price, description: description, category: category }, function (err, docs) {
+                        if (err)
+                            console.log(err);
+                        else
+                            console.log('Updated user: ', docs);
+                    })];
+            case 1:
+                product = _b.sent();
+                accessToken = req.accessToken;
+                if (!accessToken) {
+                    res.json({ message: 'Succesfully updated', product: product });
+                    return [2];
+                }
+                res.json({ message: 'Succesfully updated', product: product, accessToken: accessToken });
+                return [3, 3];
+            case 2:
+                error_5 = _b.sent();
+                console.log(error_5);
+                res.status(400).json({ message: 'Product is not in the database' });
+                return [3, 3];
+            case 3:
+                ;
+                return [2];
+        }
+    });
+}); };
+exports.editProduct = editProduct;

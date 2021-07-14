@@ -30,3 +30,43 @@ export const deleteProducts = async (productsIds: Array<string>, accessToken: st
             };
         });
 };
+
+export const getCertainProductById = async (productID: string) => {
+    return await axios.get(`http://localhost:5000/products/${productID}`)
+        .then(res => ({
+            data: res.data,
+            status: res.status,
+        }))
+        .catch(error => {
+            if(error.response) {
+            return ({
+                data: error.response.data,
+                status: error.response.status,
+            });
+            } else if (error.request) {
+            throw new Error(error.request);
+            } else {
+            throw new Error(error.message);
+            };
+        });
+};
+
+export const editProduct = async (productID: string, name: string, price: number, description: string, category: string, accessToken: string) => {
+    return await axios.put('http://localhost:5000/products/edit', {productID, name, price, description, category}, {headers: { ContentType: 'application/json', Authorization: `Bearer ${accessToken}` }, withCredentials: true})
+        .then(res => ({
+            data: res.data,
+            status: res.status,
+        }))
+        .catch(error => {
+            if(error.response) {
+            return ({
+                data: error.response.data,
+                status: error.response.status,
+            });
+            } else if (error.request) {
+            throw new Error(error.request);
+            } else {
+            throw new Error(error.message);
+            };
+        });
+};

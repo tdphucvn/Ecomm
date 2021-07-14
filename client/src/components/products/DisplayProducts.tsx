@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProductsRequest } from '../../redux/reducers/productsSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { addToCart } from '../../redux/reducers/cartSlice';
-
+import { Link as RouterLink } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -93,8 +93,8 @@ const DisplayProducts = (props: Props) => {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button color="primary" variant="outlined" onClick={() => dispatch(addToCart(product))}>Add to cart</Button>
-                            <Button color="primary">View More</Button>
+                            <Button color="secondary" variant="outlined" onClick={() => dispatch(addToCart(product))}>Add to cart</Button>
+                            <Button color="primary" component={RouterLink} to={`/product/${product._id}`} >View More</Button>
                         </CardActions>
                     </Card>
                     {admin && <Checkbox color="secondary" className={classes.checkBox} value={product._id} onChange={handleCheckboxChange}/>}

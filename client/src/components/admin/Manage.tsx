@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { deleteProductsRequest } from '../../redux/reducers/productsSlice';
 import { updateCart } from '../../redux/reducers/cartSlice';
-import { unauthorized } from '../../redux/reducers/authenticate';
+import { unauthorized, updateAccessToken } from '../../redux/reducers/authenticate';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,8 +35,7 @@ const Manage = () => {
         dispatch(deleteProductsRequest({productsIds: productsIDDelete, accessToken}))
             .then((res: any) => {
                 setProductsIDDelete([]);
-                console.log(res);
-                console.log(res.payload);
+                if(res.payload.status === 200) {if(res.payload.data.accessToken) dispatch(updateAccessToken(res.payload.data.accessToken))};
                 if(res.payload.status === 401) {alert('You are not authorized'); dispatch(unauthorized()); return};
                 if(res.payload.status === 400) {alert('Something went wrong'); return};
                 alert('Successfully deleted');

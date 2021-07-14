@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import { makeStyles, TextField, Select, MenuItem, Button, FormControl, InputLabel, CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../redux/store';
 import { addProduct } from '../../api/products';
+import { updateAccessToken } from '../../redux/reducers/authenticate';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -61,6 +61,7 @@ const ProductAdd = () => {
     const [imageFile, setImageFile] = useState<File | null>(null)
     const history = useHistory();
     const { accessToken } = useSelector((state: RootState) => state.auth);
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files !== null) {
@@ -95,7 +96,7 @@ const ProductAdd = () => {
                 const file = reader.result;
                 setLoading(true);
                 addProduct(name, price, description, file, category, accessToken)
-                    .then(res => {console.log(res); setLoading(false); history.push('/manage')})
+                    .then(res => {if(res.data.accessToken) {dispatch(updateAccessToken(res.data.accessToken));}; setLoading(false); history.push('/manage')})
                     .catch(err => console.log(err)) 
             };
         }
