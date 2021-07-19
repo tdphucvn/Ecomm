@@ -1,4 +1,4 @@
-import React, { useEffect, SetStateAction, Dispatch } from 'react';
+import React, { useEffect, SetStateAction, Dispatch, useState } from 'react';
 import { TextField, Select, Typography, makeStyles, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
@@ -28,6 +28,9 @@ type Props = {
     filterState: string;
     sortStateFunction: Dispatch<SetStateAction<string>>;
     filterStateFunction: Dispatch<SetStateAction<string>>;
+
+    queryState: string;
+    queryStateFunction: Dispatch<SetStateAction<string>>;
 };
 
 const Filters = (props: Props) => {
@@ -35,8 +38,7 @@ const Filters = (props: Props) => {
     const classes = useStyles();
     const [sort, setSort] = [props.sortState, props.sortStateFunction];
     const [filter, setFilter] = [props.filterState, props.filterStateFunction];
-    const dispatch = useDispatch<AppDispatch>();
-
+    const [query, setQuery] = [props.queryState, props.queryStateFunction];
     const search = window.location.search;
     const params = new URLSearchParams(search);
     const filterParams = params.get('filter');
@@ -50,14 +52,6 @@ const Filters = (props: Props) => {
         setSort(event.target.value as string);
     };
 
-    const handleSearchItems = async (e: React.SyntheticEvent) => {
-        e.preventDefault();
-        const target = e.target as typeof e.target & {
-            search: { value: string };
-        };
-        const query = target.search.value;
-    };
-
     const handleFilterChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
         setFilter(event.target.value as string);
     };
@@ -66,9 +60,7 @@ const Filters = (props: Props) => {
         <div>
             <Typography variant="h4" component="h2" align="center">Products</Typography>
             <FormControl className={classes.container}>
-                <form onSubmit={handleSearchItems}>
-                    <TextField name="search" id="search" label="Search" className={classes.searchInput}/>
-                </form>
+                <TextField name="search" id="search" label="Search" className={classes.searchInput} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}/>
                 <FormControl className={classes.selectContainer}>
                     <InputLabel id="sort-by-label">Filter</InputLabel>
                     <Select value={filter} onChange={handleFilterChange} labelId="sort-by-label" className={classes.sortSelect}>

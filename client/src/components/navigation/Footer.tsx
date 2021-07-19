@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import { Link as RouterLink } from 'react-router-dom';
 import { Typography, makeStyles, Divider, Button, TextField, Container, InputAdornment  } from '@material-ui/core';
 import EmailIcon from '@material-ui/icons/Email';
 import { getEmailNewsletter } from '../../api/contact';
@@ -88,15 +88,15 @@ const Footer = () => {
                     <div className={classes.collectionContainer}>
                         <Typography variant="h5" gutterBottom={true}>Collection</Typography>
                         <ul>
-                            <li><Typography component="a" href="#" gutterBottom={true}>On the Edge</Typography></li>
-                            <li><Typography component="a" href="#" gutterBottom={true}>Master of the Night</Typography></li>
-                            <li><Typography component="a" href="#" gutterBottom={true}>Never More</Typography></li>
+                            <li><Typography component={RouterLink} to="/collection" gutterBottom={true}>On the Edge</Typography></li>
+                            <li><Typography component={RouterLink} to="/collection" gutterBottom={true}>Master of the Night</Typography></li>
+                            <li><Typography component={RouterLink} to="/collection" gutterBottom={true}>Never More</Typography></li>
                         </ul>
                     </div>
                     <div className={classes.contactContainer}>
                         <Typography variant="h5" gutterBottom={true}>Contact</Typography>
                         <ul>
-                            <li><Typography component="a" href="#">Contact Us</Typography></li>
+                            <li><Typography component={RouterLink} to="/contact">Contact Us</Typography></li>
                             <li>
                                 <div style={{opacity: 0.7}}>
                                     <Typography>Philip Tran</Typography>

@@ -73,10 +73,6 @@ export const getCertainItemDetails = async (req: Request, res: Response): Promis
     };
 };
 
-export const postSearchItem = async (req: Request, res: Response): Promise<void> => {
-    res.json({search:'Search Item'});
-};
-
 export const addProduct = async (req: Request | any, res: Response): Promise<void> => {
     try {
         const { name, price, description, file, category } = req.body;
@@ -153,5 +149,29 @@ export const editProduct = async (req: Request | any, res: Response) => {
     } catch (error) {
         console.log(error);
         res.status(400).json({message: 'Product is not in the database'});
+    };
+};
+
+export const getCollection = async (req: Request, res: Response) => {
+    try {
+        const query = req.query;
+        let collectionProducts;
+        switch(query.category){
+            case 'ontheedge':
+                collectionProducts = await Products.find({category: 'homeDecor'}).sort({"price" : -1}).limit(3);
+                break;
+            case 'masterofthenight':
+                collectionProducts = await Products.find({category: 'electronics'}).sort({"price": -1}).limit(3);
+                break;
+            case 'nevermore':
+                collectionProducts = await Products.find({category: 'grocery'}).sort({"price": -1}).limit(3);
+                break;
+            default:
+                collectionProducts = await Products.find(query).sort({ "soldPieces" : -1 }).limit(3);
+                break;
+        }
+        res.json({products: collectionProducts});
+    } catch (error) {
+        console.log(error);
     };
 };

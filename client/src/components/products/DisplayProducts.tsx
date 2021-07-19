@@ -43,12 +43,25 @@ type Props = {
     productsID: Array<string> | undefined | null;
     setProductsID: React.Dispatch<React.SetStateAction<string[]>> | undefined | null;
 
+    queryState: string
+};
+
+type Product = {
+    _id: string;
+    name: string;
+    price: number;
+    description: string;
+    image: {
+        url: string;
+        public_id: string;
+    };
 };
 
 const DisplayProducts = (props: Props) => {
     const classes = useStyles();
     const [loading, setLoading] = useState<boolean>(true);
     const [productsIDDelete, setProductsIDDelete] = [props.productsID, props.setProductsID];
+    const [fetchedProducts, setFetchedProducts] = useState<Array<Product>>([])
     const dispatch = useDispatch<AppDispatch>();
     const { products } = useSelector((state: RootState) => state.products);
     const { admin } = useSelector((state: RootState) => state.auth);
@@ -64,6 +77,22 @@ const DisplayProducts = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.sortState, props.filterState]);
 
+    useEffect(() => {
+        setFetchedProducts(products);
+    }, [products]);
+
+    const filterProducts = (regex: any ) => {
+        let searchedProducts = [...fetchedProducts].filter(product => regex.test(product.name));
+        setFetchedProducts(searchedProducts);
+    };
+
+    useEffect(() => {
+        if(props.queryState === '') return;
+        const searchProductsRegex = new RegExp(props.queryState, "i");
+        filterProducts(searchProductsRegex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.queryState])
+
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked;
         if(checked) {
@@ -73,10 +102,10 @@ const DisplayProducts = (props: Props) => {
         setProductsIDDelete((currentArr) => (currentArr.filter(id => id !== e.target.value)));
     };
 
-    if(products && products.length !== 0) {
+    if(fetchedProducts && fetchedProducts.length !== 0) {
         return (
             <Grid container spacing={3} className={classes.productsContainer}>
-            { products.map(product => (
+            { fetchedProducts.map(product => (
                 <Grid item md={4} sm={6} xs={12} key={product.image.public_id} className={classes.product}>
                     <Card>
                         <CardMedia image={product.image.url} className={classes.media} title="Product"/>
@@ -102,7 +131,7 @@ const DisplayProducts = (props: Props) => {
             )) }
             </Grid>
         );
-    } else if(!loading && products && products.length === 0) {
+    } else if(!loading && fetchedProducts && fetchedProducts.length === 0) {
         return (
             <div className={classes.loadingContainer}>
                 <Typography>No products founded</Typography>

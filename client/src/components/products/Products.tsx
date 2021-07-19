@@ -20,11 +20,12 @@ const Products = (props: Props) => {
     const classes = useStyles();
     const [sort, setSort] = useState<string>('none');
     const [filter, setFilter] = useState<string>('all');
+    const [query, setQuery] = useState<string>('');
 
     return (
         <div className={classes.container}>
-            <Filters sortState={sort} sortStateFunction={setSort} filterState={filter} filterStateFunction={setFilter} />
-            <DisplayProducts sortState={sort} filterState={filter} productsID={props.productsID} setProductsID={props.setProductsID} />
+            <Filters sortState={sort} sortStateFunction={setSort} filterState={filter} filterStateFunction={setFilter} queryState={query} queryStateFunction={setQuery} />
+            <DisplayProducts queryState={query} sortState={sort} filterState={filter} productsID={props.productsID} setProductsID={props.setProductsID} />
         </div>
     )
 }

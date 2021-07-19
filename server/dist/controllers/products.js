@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editProduct = exports.deleteProducts = exports.addProduct = exports.postSearchItem = exports.getCertainItemDetails = exports.getProducts = void 0;
+exports.getCollection = exports.editProduct = exports.deleteProducts = exports.addProduct = exports.getCertainItemDetails = exports.getProducts = void 0;
 var Products_1 = __importDefault(require("../model/Products"));
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
@@ -134,13 +134,6 @@ var getCertainItemDetails = function (req, res) { return __awaiter(void 0, void 
     });
 }); };
 exports.getCertainItemDetails = getCertainItemDetails;
-var postSearchItem = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({ search: 'Search Item' });
-        return [2];
-    });
-}); };
-exports.postSearchItem = postSearchItem;
 var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, name, price, description, file, category, uploadResponse, url, public_id, newProduct, savedProduct, accessToken, error_3;
     return __generator(this, function (_b) {
@@ -284,3 +277,48 @@ var editProduct = function (req, res) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.editProduct = editProduct;
+var getCollection = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var query, collectionProducts, _a, error_6;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 10, , 11]);
+                query = req.query;
+                collectionProducts = void 0;
+                _a = query.category;
+                switch (_a) {
+                    case 'ontheedge': return [3, 1];
+                    case 'masterofthenight': return [3, 3];
+                    case 'nevermore': return [3, 5];
+                }
+                return [3, 7];
+            case 1: return [4, Products_1.default.find({ category: 'homeDecor' }).sort({ "price": -1 }).limit(3)];
+            case 2:
+                collectionProducts = _b.sent();
+                return [3, 9];
+            case 3: return [4, Products_1.default.find({ category: 'electronics' }).sort({ "price": -1 }).limit(3)];
+            case 4:
+                collectionProducts = _b.sent();
+                return [3, 9];
+            case 5: return [4, Products_1.default.find({ category: 'grocery' }).sort({ "price": -1 }).limit(3)];
+            case 6:
+                collectionProducts = _b.sent();
+                return [3, 9];
+            case 7: return [4, Products_1.default.find(query).sort({ "soldPieces": -1 }).limit(3)];
+            case 8:
+                collectionProducts = _b.sent();
+                return [3, 9];
+            case 9:
+                res.json({ products: collectionProducts });
+                return [3, 11];
+            case 10:
+                error_6 = _b.sent();
+                console.log(error_6);
+                return [3, 11];
+            case 11:
+                ;
+                return [2];
+        }
+    });
+}); };
+exports.getCollection = getCollection;

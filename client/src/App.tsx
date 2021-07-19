@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import PrivateRoute from './routes/PrivateRoute';
 import AdminRoute from './routes/AdminRoute';
 import RestrictedRoute from './routes/RestrictedRoute';
+import ScrollToTop from './routes/ScrollToTop';
 
 import Header from './components/navigation/Header';
 import Index from './pages/Index';
@@ -18,12 +19,13 @@ import ProductEdit from './components/admin/ProductEdit';
 import ProductAdd from './components/admin/ProductAdd';
 import Cart from './components/cart/Cart';
 import Contact from './components/contact/Contact';
+import Checkout from './components/checkout/Checkout';
 
 const App: FC = () => {
-
     return (
         <>
             <Router>
+                <ScrollToTop />
                 <Switch>
                     <Route path="/authentication" component={AuthHeader}/>
                     <Route component={Header}/>
@@ -35,6 +37,7 @@ const App: FC = () => {
                     <Route exact path="/product/:id" component={Product} />
                     <Route exact path="/cart" component={Cart} />
                     <Route exact path="/contact" component={Contact} />
+                    <Route exact path="/checkout" component={Checkout} />
                     <RestrictedRoute path="/authentication" component={Authentication} />
                     <AdminRoute exact path="/manage" component={Manage}/>
                     <AdminRoute exact path="/manage/add" component={ProductAdd}/>

@@ -14,9 +14,9 @@ const LatestProducts = () => {
 
     return (
         <div className={classes.container}>
-            <DisplayTopProducts />
-            <DisplayTopProducts />
-            <DisplayTopProducts />
+            <DisplayTopProducts category="homeDecor" title="Most Exclusive Decor"/>
+            <DisplayTopProducts category="electronics" title="Best Quality For a Reasonable Price"/>
+            <DisplayTopProducts category="grocery" title="Freshest Goods On The Marketplace"/>
         </div>
     )
 }

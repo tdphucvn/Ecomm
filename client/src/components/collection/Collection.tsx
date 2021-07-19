@@ -16,9 +16,9 @@ const Collection = () => {
     return (
         <div className={classes.container}>
             <Typography variant="h4" component="h2">Our handpicked collection just for you</Typography>
-            <DisplayTopProducts />
-            <DisplayTopProducts />
-            <DisplayTopProducts />
+            <DisplayTopProducts category="ontheedge" title="On the Edge"/>
+            <DisplayTopProducts category="masterofthenight" title="Master of the Night"/>
+            <DisplayTopProducts category="nevermore" title="Never More"/>
         </div>
     )
 }

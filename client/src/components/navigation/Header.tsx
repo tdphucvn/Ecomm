@@ -136,16 +136,16 @@ const Header = () => {
                 </div>
                 <div className={classes.growContainer}></div>
                 <div className={classes.contactContainer}>
-                    <Typography component="a" href="/contact">CONTACT US</Typography>
+                    <Typography component={RouterLink} to="/contact">CONTACT US</Typography>
                     <Typography>•</Typography>
-                    <Typography component="a" href="/account">YOUR ORDERS</Typography>
+                    <Typography component={RouterLink} to="/orders">YOUR ORDERS</Typography>
                 </div>
             </div>
             <div className={classes.heroContainer}>
                 <nav className={classes.navBar}>
                     <ul style={{width: '100%'}}>
                         <li style={{flex: 1}}>
-                            <Link component="a" href="/">
+                            <Link component={RouterLink} to="/">
                             <img src={logo} alt="" style={{height: 70, width: 70}}/>
                             </Link>
                         </li>
@@ -185,7 +185,7 @@ const Header = () => {
                                 }
                             </li>
                             <li>
-                                <IconButton component="a" href="/cart">
+                                <IconButton component={RouterLink} to="/cart">
                                     <Badge color="secondary" badgeContent={count}>
                                         <ShoppingCartIcon />
                                     </Badge>
