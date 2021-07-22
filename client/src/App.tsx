@@ -20,6 +20,8 @@ import ProductAdd from './components/admin/ProductAdd';
 import Cart from './components/cart/Cart';
 import Contact from './components/contact/Contact';
 import Checkout from './components/checkout/Checkout';
+import CheckoutHeader from './components/navigation/checkout/CheckoutHeader';
+import CheckoutFooter from './components/navigation/checkout/CheckoutFooter';
 
 const App: FC = () => {
     return (
@@ -28,6 +30,7 @@ const App: FC = () => {
                 <ScrollToTop />
                 <Switch>
                     <Route path="/authentication" component={AuthHeader}/>
+                    <Route path="/checkout" component={CheckoutHeader} />
                     <Route component={Header}/>
                 </Switch>
                 <Switch>
@@ -45,6 +48,7 @@ const App: FC = () => {
                 </Switch>
                 <Switch>
                     <Route path="/authentication" component={AuthFooter}/>
+                    <Route path="/checkout" component={CheckoutFooter}/>
                     <Route component={Footer}/>
                 </Switch>
             </Router>
