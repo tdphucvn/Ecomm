@@ -43,7 +43,6 @@ export const cartSlice = createSlice({
     },
     updateCart: (state, action) => {
       const removedProducts = action.payload.data.arrayOfProductsIDs;
-      console.log(removedProducts);
       let productsInCart = state.items;
       removedProducts.forEach((removedProductId: string) => {
         const updatedProductsInCart = productsInCart.filter(product => product._id !== removedProductId)
@@ -52,8 +51,13 @@ export const cartSlice = createSlice({
       state.items = productsInCart;
       state.count = productsInCart.length;
     },
+    cleanCart: (state) => {
+      state.items = [];
+      state.total = 0;
+      state.count = 0;
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { addToCart, removeFromCart, updateCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCart, cleanCart } = cartSlice.actions;
 export default cartSlice.reducer;

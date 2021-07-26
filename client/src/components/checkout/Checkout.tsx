@@ -1,8 +1,19 @@
-import React, {useState} from 'react';
-import { makeStyles, Paper, Stepper, Step, StepLabel, Button, Typography } from '@material-ui/core';
+import React, {Dispatch, SetStateAction, useState, useEffect} from 'react';
+import { makeStyles, Paper, Stepper, Step, StepLabel, Button, Typography, CircularProgress } from '@material-ui/core';
 import Address from './Address';
-import Payment from './Payment';
+import PaymentForm from './PaymentForm';
 import Review from './Review';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { cleanCart } from '../../redux/reducers/cartSlice';
+import { getProductsRequest } from '../../redux/reducers/productsSlice';
+
+import { Link as RouterLink } from 'react-router-dom';
+ 
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+
+const promise = loadStripe("pk_test_sifzp0ZLo4b6A5TLnU1U4o3p00Fg5O3uxB");
 
 const useStyles = makeStyles((theme) => ({
     checkoutContainer: {
@@ -42,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
 interface AddressInterface {
     firstName: string;
@@ -53,23 +64,22 @@ interface AddressInterface {
     state: string;
     zip: number;
     country: string;
-}
-
-interface PaymentInterface {
-    name: string;
-    cardNum: number;
-    expire: string;
-    cvv: number;
 };
 
-const getStepContent = (step: number, address: AddressInterface, payment: PaymentInterface) => {
+const getStepContent = (step: number, address: AddressInterface, submit: boolean, setSubmit: Dispatch<SetStateAction<boolean>>, succeded: boolean, setSucceded: Dispatch<SetStateAction<boolean>>) => {
     switch(step){
         case 0:
             return <Address />;
         case 1:
-            return <Payment />;
+            return <Review address={address}/>;
         case 2:
-            return <Review address={address} payment={payment}/>;
+            return (
+                <div className="CheckoutForm">
+                    <Elements stripe={promise}>
+                        <PaymentForm address={address} submit={submit} setSubmit={setSubmit} succeded={succeded} setSucceded={setSucceded} />
+                    </Elements>
+                </div>    
+            );
         default:
             throw new Error('Unknown step');
     };
@@ -77,42 +87,55 @@ const getStepContent = (step: number, address: AddressInterface, payment: Paymen
 
 
 const Checkout = () => {
+    const dispatch = useDispatch<AppDispatch>();
     const classes = useStyles();
     const [activeStep, setActiveStep] = useState<number>(0);
     const [address, setAddress] = useState<AddressInterface>();
-    const [payment, setPayment] = useState<PaymentInterface>();
+    const [submit, setSubmit] = useState<boolean>(false);
+    const [succeded, setSucceded] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(!succeded) return;
+        setActiveStep(activeStep => activeStep + 1);
+        dispatch(cleanCart());
+
+        const sortState = 'none';
+        const filterState = 'all';
+        dispatch(getProductsRequest({sortState, filterState}))
+            .then(res => {
+                console.log(res);
+            })
+    }, [succeded, dispatch]);
 
     const handleNext = () => {
-        switch(activeStep){
-            case 0:
-                const addressForm = document.getElementById('addressForm') as HTMLFormElement;
-                const addressFormData = new FormData(addressForm);
-                const addressData = {
-                    firstName: addressFormData.get('firstName') as string,
-                    lastName: addressFormData.get('lastName') as string,
-                    address1: addressFormData.get('address1') as string,
-                    address2: addressFormData.get('address2') as string,
-                    city: addressFormData.get('city') as string,
-                    state: addressFormData.get('state') as string,
-                    zip: addressFormData.get('zip') as unknown as number,
-                    country: addressFormData.get('country') as string,
-                };
-                setAddress(addressData);
-                break;
-            case 1:
-                const paymentForm = document.getElementById('paymentForm') as HTMLFormElement;
-                const paymentFormData = new FormData(paymentForm);
-                const paymentData = {
-                    name: paymentFormData.get('cardName') as string,
-                    cardNum: paymentFormData.get('cardNumber') as unknown as number,
-                    expire: paymentFormData.get('expDate') as string,
-                    cvv: paymentFormData.get('cvv') as unknown as number,
-                };
-                console.log(paymentData);
-                setPayment(paymentData);
-                break;
-            default:
-                break;
+        if(activeStep === 2) {
+            const paymentSubmitButton = document.getElementById('paymentSubmitButton') as HTMLButtonElement;
+            paymentSubmitButton.click();
+            return;
+        };
+
+        if(activeStep === 1) {
+            const { firstName, lastName, address1, city, country } = address;
+            if(firstName === '' ||lastName === '' || address1 === '' || city === '' || country === '') {
+                alert('You cannot proceed to payment without fully filled addresses!');
+                return;
+            }
+        };
+
+        if(activeStep === 0){
+            const addressForm = document.getElementById('addressForm') as HTMLFormElement;
+            const addressFormData = new FormData(addressForm);
+            const addressData = {
+                firstName: addressFormData.get('firstName') as string,
+                lastName: addressFormData.get('lastName') as string,
+                address1: addressFormData.get('address1') as string,
+                address2: addressFormData.get('address2') as string,
+                city: addressFormData.get('city') as string,
+                state: addressFormData.get('state') as string,
+                zip: addressFormData.get('zip') as unknown as number,
+                country: addressFormData.get('country') as string,
+            };
+            setAddress(addressData);
         };
 
         setActiveStep(activeStep + 1);
@@ -142,14 +165,17 @@ const Checkout = () => {
                         <Typography variant="h5" gutterBottom>
                         Thank you for your order.
                         </Typography>
-                        <Typography variant="subtitle1">
-                        Your order number is #2001539. We have emailed your order confirmation, and will
+                        <Typography variant="subtitle1" gutterBottom>
+                        We have emailed your order confirmation, and will
                         send you an update when your order has shipped.
                         </Typography>
+                        <Button component={RouterLink} to="/" variant="contained" color="primary" style={{margin: 'auto'}}>
+                            Back to home
+                        </Button>
                     </React.Fragment>
                     ) : (
                     <React.Fragment>
-                        {getStepContent(activeStep, address, payment)}
+                        {getStepContent(activeStep, address, submit, setSubmit, succeded, setSucceded)}
                         <div className={classes.buttons}>
                         {activeStep !== 0 && (
                             <Button onClick={handleBack} className={classes.button}>
@@ -162,7 +188,7 @@ const Checkout = () => {
                             onClick={handleNext}
                             className={classes.button}
                         >
-                            {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                            {activeStep === steps.length - 1 ? (submit ? <CircularProgress style={{color: 'white'}} /> : 'Place Order') : 'Next'}
                         </Button>
                         </div>
                     </React.Fragment>

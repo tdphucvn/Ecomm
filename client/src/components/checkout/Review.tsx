@@ -83,7 +83,7 @@ const Review = (props) => {
               </ListItem>
             </List>
             <Grid container spacing={4}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <Typography variant="h6" gutterBottom className={classes.title}>
                   Shipping
                 </Typography>
@@ -114,7 +114,7 @@ const Review = (props) => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item container direction="column" xs={12} sm={6}>
+              {/* <Grid item container direction="column" xs={12} sm={6}>
                 <Typography variant="h6" gutterBottom className={classes.title}>
                   Payment details
                 </Typography>
@@ -144,7 +144,7 @@ const Review = (props) => {
                       <Typography gutterBottom>{props.payment.cvv}</Typography>
                     </Grid>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Grid>
         </div>
     )

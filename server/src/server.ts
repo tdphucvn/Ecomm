@@ -14,7 +14,7 @@ import productsRoute from './routes/products';
 import contactRoute from './routes/contact';
 import authenticationRoute from './routes/authentication';
 import productsAdminRoute from './routes/admin/productsAdmin';
-
+import paymentRouter from './routes/payment';
 
 const app: Application = express();
 
@@ -30,7 +30,7 @@ app.use('/products', productsRoute);
 app.use('/products', productsAdminRoute);
 app.use('/contact', contactRoute);
 app.use('/authentication', authenticationRoute);
-
+app.use('/payment', paymentRouter);
 
 const uri: string = `${process.env.DB_CONNECTION}`;
 const options = { useUnifiedTopology: true , useNewUrlParser: true };
