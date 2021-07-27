@@ -22,6 +22,7 @@ const PaymentForm = (props) => {
             headers: {
               "Content-Type": "application/json"
             },
+            credentials: 'include',
             body: JSON.stringify({items, address: props.address})
           })
           .then(res => {
