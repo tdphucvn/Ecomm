@@ -15,12 +15,12 @@ const authenticate =async (req: Request | any, res: Response, next: NextFunction
         try {
             const refreshToken: string = req.cookies.refreshToken;
             const refreshTokenSecret: string = `${process.env.REFRESH_TOKEN_SECRET}`;
-            if(refreshToken == null || refreshToken == '') { res.status(401).json({message: 'Unauthorized'}); return; }
+            if(refreshToken == null || refreshToken == '') { console.log('RefreshToken is not provided') ;res.status(401).json({message: 'Unauthorized'}); return; }
             const decoded: any = await jwt.verify(refreshToken, refreshTokenSecret);
-            if(JSON.stringify(decoded.user) !== JSON.stringify(userSession)) {res.status(401).json({message: 'Unauthorized'}); return;};
+            if(JSON.stringify(decoded.user) !== JSON.stringify(userSession)) {console.log('user and userSession is not matching'); res.status(401).json({message: 'Unauthorized'}); return;};
             
-            const newAccessToken = jwt.sign({ userSession }, accessTokenSecret, {expiresIn: '10min'});
-            const newRefreshToken = jwt.sign({ userSession }, refreshTokenSecret, {expiresIn: '1day'});
+            const newAccessToken = jwt.sign({ user: userSession }, accessTokenSecret, {expiresIn: '30s'});
+            const newRefreshToken = jwt.sign({ user: userSession }, refreshTokenSecret, {expiresIn: '1day'});
 
             req.accessToken = newAccessToken;
             req.decoded = decoded;
@@ -29,6 +29,7 @@ const authenticate =async (req: Request | any, res: Response, next: NextFunction
             res.clearCookie('authorization');
             res.clearCookie('refreshToken');
             res.clearCookie('userSession');
+            console.log(error);
             res.status(401).json({message: 'Unauthorized'});
             return;
         };

@@ -8,8 +8,8 @@ const PrivateRoute = (props: any) => {
     const { authenticated } = useSelector((state: RootState) => state.auth);
 
     return (
-        <Route {...rest} render={() => (authenticated ? <Component /> : <Redirect to="/authenticate/login" />)}/>
+        <Route {...rest} render={() => (authenticated ? <Component /> : <Redirect to="/authentication/login" />)}/>
     )
 };
 
-export default PrivateRoute
+export default PrivateRoute;

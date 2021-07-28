@@ -74,6 +74,7 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
                 refreshToken = req.cookies.refreshToken;
                 refreshTokenSecret = "" + process.env.REFRESH_TOKEN_SECRET;
                 if (refreshToken == null || refreshToken == '') {
+                    console.log('RefreshToken is not provided');
                     res.status(401).json({ message: 'Unauthorized' });
                     return [2];
                 }
@@ -81,12 +82,13 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
             case 5:
                 decoded = _a.sent();
                 if (JSON.stringify(decoded.user) !== JSON.stringify(userSession)) {
+                    console.log('user and userSession is not matching');
                     res.status(401).json({ message: 'Unauthorized' });
                     return [2];
                 }
                 ;
-                newAccessToken = jsonwebtoken_1.default.sign({ userSession: userSession }, accessTokenSecret, { expiresIn: '10min' });
-                newRefreshToken = jsonwebtoken_1.default.sign({ userSession: userSession }, refreshTokenSecret, { expiresIn: '1day' });
+                newAccessToken = jsonwebtoken_1.default.sign({ user: userSession }, accessTokenSecret, { expiresIn: '30s' });
+                newRefreshToken = jsonwebtoken_1.default.sign({ user: userSession }, refreshTokenSecret, { expiresIn: '1day' });
                 req.accessToken = newAccessToken;
                 req.decoded = decoded;
                 res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
@@ -96,6 +98,7 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
                 res.clearCookie('authorization');
                 res.clearCookie('refreshToken');
                 res.clearCookie('userSession');
+                console.log(error_2);
                 res.status(401).json({ message: 'Unauthorized' });
                 return [2];
             case 7:

@@ -22,6 +22,8 @@ import Contact from './components/contact/Contact';
 import Checkout from './components/checkout/Checkout';
 import CheckoutHeader from './components/navigation/checkout/CheckoutHeader';
 import CheckoutFooter from './components/navigation/checkout/CheckoutFooter';
+import Orders from './components/order/Orders';
+import OrderReview from './components/order/OrderReview';
 
 const App: FC = () => {
     return (
@@ -42,6 +44,8 @@ const App: FC = () => {
                     <Route exact path="/contact" component={Contact} />
                     <Route exact path="/checkout" component={Checkout} />
                     <RestrictedRoute path="/authentication" component={Authentication} />
+                    <PrivateRoute exact path="/orders" component={Orders} />
+                    <PrivateRoute exact path="/orders/:id" component={OrderReview} />
                     <AdminRoute exact path="/manage" component={Manage}/>
                     <AdminRoute exact path="/manage/add" component={ProductAdd}/>
                     <AdminRoute exact path="/manage/edit/:id" component={ProductEdit}/>

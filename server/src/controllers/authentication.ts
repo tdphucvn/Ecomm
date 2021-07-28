@@ -61,7 +61,7 @@ export const logoutRequest = async (req: Request, res: Response): Promise<void> 
 const assigningTokens = (user: IUser, response: Response) => {
     const accessSecretToken: string = `${process.env.ACCESS_TOKEN_SECRET}`;
     const refreshSecretToken: string = `${process.env.REFRESH_TOKEN_SECRET}`;
-    const newAccessToken: string = jwt.sign({ user }, accessSecretToken, {expiresIn: '10min'}); //Creating an access token with JWT
+    const newAccessToken: string = jwt.sign({ user }, accessSecretToken, {expiresIn: '30s'}); //Creating an access token with JWT
     const newRefreshToken: string = jwt.sign({ user }, refreshSecretToken, {expiresIn: '1day'}); //Creating a refresh token with JWT
     
     response.cookie('authorization', newAccessToken,  {httpOnly: true}); // Using cookie to store Access token

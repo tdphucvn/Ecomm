@@ -4,8 +4,7 @@ if(process.env.NODE_ENV !== 'production'){
 
 const PORT: string | number = process.env.PORT || 5000;
 
-import express, {Application, Request, Response, NextFunction} from 'express';
-import bodyParser from 'body-parser';
+import express, {Application} from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -15,6 +14,7 @@ import contactRoute from './routes/contact';
 import authenticationRoute from './routes/authentication';
 import productsAdminRoute from './routes/admin/productsAdmin';
 import paymentRouter from './routes/payment';
+import ordersRouter from './routes/private/orders';
 
 const app: Application = express();
 
@@ -31,6 +31,7 @@ app.use('/products', productsAdminRoute);
 app.use('/contact', contactRoute);
 app.use('/authentication', authenticationRoute);
 app.use('/payment', paymentRouter);
+app.use('/orders', ordersRouter);
 
 const uri: string = `${process.env.DB_CONNECTION}`;
 const options = { useUnifiedTopology: true , useNewUrlParser: true };
