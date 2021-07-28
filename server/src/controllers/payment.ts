@@ -39,15 +39,23 @@ const updateSoldPiecesInDB = async (products: Array<IProduct>) => {
   };
 };
 
-const createOrder = async (items: Array<IProduct>, price: number, userId: string | undefined) => {
+const createOrder = async (items: Array<IProduct>, price: number, userId: string | undefined, city: string, country: string, address1: string, address2: string, zip: number, state: string, firstName: string, lastName: string) => {
     
     const order: IOrder = new Order({
         items,
         user: userId ? userId : null,
+        shippingInfo: {
+          name: `${firstName} ${lastName}`,
+          address1,
+          address2,
+          city,
+          country,
+          state,
+          zip,
+        },
         price,
     });
 
-    console.log(order);
     await order.save();
 };
 
@@ -74,7 +82,7 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
     metadata: getProductsIds(productsFromDB)
   });
   await updateSoldPiecesInDB(productsFromDB);
-  await createOrder(productsFromDB, price, req.cookies.userSession);
+  await createOrder(productsFromDB, price, req.cookies.userSession, city, country, address1, address2, zip, state, firstName, lastName);
   res.send({
     clientSecret: paymentIntent.client_secret
   });

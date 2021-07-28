@@ -28,6 +28,10 @@ var orderSchema = new mongoose_1.default.Schema({
     user: {
         type: String || null,
     },
+    shippingInfo: {
+        type: Object,
+        required: true,
+    },
     date: {
         type: Date,
         default: Date.now,

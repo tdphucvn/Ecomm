@@ -23,7 +23,7 @@ export const getOrder = async (id: string, accessToken: string) => {
         withCredentials: true,
     };
 
-    return axios.get(`http://localhost:5000/getOrder/${id}`, config)
-        .then((res: any) => res.data)
+    return axios.get(`http://localhost:5000/orders/${id}`, config)
+        .then((res: any) => res.data.order)
         .catch(err => console.log(err));
 };

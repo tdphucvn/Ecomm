@@ -110,7 +110,7 @@ var updateSoldPiecesInDB = function (products) { return __awaiter(void 0, void 0
         }
     });
 }); };
-var createOrder = function (items, price, userId) { return __awaiter(void 0, void 0, void 0, function () {
+var createOrder = function (items, price, userId, city, country, address1, address2, zip, state, firstName, lastName) { return __awaiter(void 0, void 0, void 0, function () {
     var order;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -118,9 +118,17 @@ var createOrder = function (items, price, userId) { return __awaiter(void 0, voi
                 order = new Order_1.default({
                     items: items,
                     user: userId ? userId : null,
+                    shippingInfo: {
+                        name: firstName + " " + lastName,
+                        address1: address1,
+                        address2: address2,
+                        city: city,
+                        country: country,
+                        state: state,
+                        zip: zip,
+                    },
                     price: price,
                 });
-                console.log(order);
                 return [4, order.save()];
             case 1:
                 _a.sent();
@@ -161,7 +169,7 @@ var createPaymentIntent = function (req, res) { return __awaiter(void 0, void 0,
                 return [4, updateSoldPiecesInDB(productsFromDB)];
             case 3:
                 _c.sent();
-                return [4, createOrder(productsFromDB, price, req.cookies.userSession)];
+                return [4, createOrder(productsFromDB, price, req.cookies.userSession, city, country, address1, address2, zip, state, firstName, lastName)];
             case 4:
                 _c.sent();
                 res.send({

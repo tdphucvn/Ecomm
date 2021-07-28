@@ -5,19 +5,19 @@ import { RootState, AppDispatch } from '../../redux/store';
 import { updateAccessToken } from '../../redux/reducers/authenticate';
 
 import { Link as RouterLink } from 'react-router-dom';
-import { Container , makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import { Container , makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography, Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
     },
-    orderLink: {
-        textDecoration: 'none',
-        '&:hover': {
-            backgroundColor: '#EFEFEF',
-        }
-    }
+    // orderLink: {
+    //     textDecoration: 'none',
+    //     '&:hover': {
+    //         backgroundColor: '#EFEFEF',
+    //     }
+    // }
 }));
 
 type Item = {
@@ -67,17 +67,19 @@ const Orders = () => {
                         <TableCell>Date</TableCell>
                         <TableCell>Amount</TableCell>
                         <TableCell>Price</TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {orders ? orders.map((order: OrderType) => {
                         const date = order.date.split('T')[0];
                         return (
-                            <TableRow component={RouterLink} to={`/orders/${order._id}`} className={classes.orderLink} key={order._id}>
+                            <TableRow  key={order._id}>
                                 <TableCell>{order._id}</TableCell>
                                 <TableCell>{date}</TableCell>
                                 <TableCell>{order.items.length}</TableCell>
                                 <TableCell>{order.price}</TableCell>
+                                <TableCell><Button component={RouterLink} to={`/orders/${order._id}`}>Details</Button></TableCell>
                             </TableRow>
                         )
                     }) : 

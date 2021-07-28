@@ -42,10 +42,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCertainOrder = exports.getYourOrders = void 0;
 var Order_1 = __importDefault(require("../model/Order"));
 var getYourOrders = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, id, orders, newAccessToken;
+    var user, id, orders, newAccessToken, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 2, , 3]);
                 user = req.decoded.user;
                 id = user._id;
                 return [4, Order_1.default.find({ user: id })];
@@ -57,15 +58,40 @@ var getYourOrders = function (req, res) { return __awaiter(void 0, void 0, void 
                     return [2];
                 }
                 res.send({ orders: orders, newAccessToken: null });
+                return [3, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.log(error_1);
+                res.status(500).send({ message: new Error('Something went wrong') });
+                return [3, 3];
+            case 3:
+                ;
                 return [2];
         }
     });
 }); };
 exports.getYourOrders = getYourOrders;
 var getCertainOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var orderId, order, error_2;
     return __generator(this, function (_a) {
-        res.send({ message: 'order' });
-        return [2];
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                orderId = req.params.id;
+                return [4, Order_1.default.findById(orderId)];
+            case 1:
+                order = _a.sent();
+                res.status(200).send({ order: order });
+                return [3, 3];
+            case 2:
+                error_2 = _a.sent();
+                console.log(error_2);
+                res.status(500).send({ message: new Error('Something went wrong') });
+                return [3, 3];
+            case 3:
+                ;
+                return [2];
+        }
     });
 }); };
 exports.getCertainOrder = getCertainOrder;
