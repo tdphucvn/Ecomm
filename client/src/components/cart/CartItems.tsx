@@ -81,7 +81,7 @@ const CartItems = () => {
         <div className={classes.container}>
             <List className={classes.itemsList}>
                 {cart && cart.map(item => (
-                    <ListItem style={{padding: '10px 0'}}>
+                    <ListItem style={{padding: '10px 0'}} key={item.id}>
                         <ListItemAvatar>
                             <img src={item.image.url} alt={item.name} className={classes.listItemImage}/>
                         </ListItemAvatar>

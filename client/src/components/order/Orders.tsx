@@ -5,19 +5,16 @@ import { RootState, AppDispatch } from '../../redux/store';
 import { updateAccessToken } from '../../redux/reducers/authenticate';
 
 import { Link as RouterLink } from 'react-router-dom';
-import { Container , makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography, Button } from '@material-ui/core';
+import { Container , makeStyles, Table, TableBody, TableCell, TableHead, TableRow, Typography, Button, CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     container: {
+        width: '80%',
+        margin: 'auto',
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
+        minHeight: '50vh',
     },
-    // orderLink: {
-    //     textDecoration: 'none',
-    //     '&:hover': {
-    //         backgroundColor: '#EFEFEF',
-    //     }
-    // }
 }));
 
 type Item = {
@@ -58,41 +55,39 @@ const Orders = () => {
     }, [accessToken, dispatch]);
 
     return (
-        <Container maxWidth="lg" className={classes.container}>
+        <div className={classes.container}>
             <Typography component="h2" variant="h5" gutterBottom>Your Orders</Typography>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Order ID</TableCell>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Amount</TableCell>
-                        <TableCell>Price</TableCell>
-                        <TableCell></TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {orders ? orders.map((order: OrderType) => {
-                        const date = order.date.split('T')[0];
-                        return (
-                            <TableRow  key={order._id}>
-                                <TableCell>{order._id}</TableCell>
-                                <TableCell>{date}</TableCell>
-                                <TableCell>{order.items.length}</TableCell>
-                                <TableCell>{order.price}</TableCell>
-                                <TableCell><Button component={RouterLink} to={`/orders/${order._id}`}>Details</Button></TableCell>
-                            </TableRow>
-                        )
-                    }) : 
+            { 
+                orders ? 
+                <Table>
+                    <TableHead>
                         <TableRow>
-                            <TableCell>None</TableCell>
-                            <TableCell>None</TableCell>
-                            <TableCell>None</TableCell>
-                            <TableCell>None</TableCell>
+                            <TableCell>Order ID</TableCell>
+                            <TableCell>Date</TableCell>
+                            <TableCell>Amount</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
-                    }
-                </TableBody>
-            </Table>
-        </Container>
+                    </TableHead>
+                    <TableBody>
+                        {orders.map((order: OrderType) => {
+                            const date = order.date.split('T')[0];
+                            return (
+                                <TableRow  key={order._id}>
+                                    <TableCell>{order._id}</TableCell>
+                                    <TableCell>{date}</TableCell>
+                                    <TableCell>{order.items.length}</TableCell>
+                                    <TableCell>{order.price}</TableCell>
+                                    <TableCell><Button component={RouterLink} to={`/orders/${order._id}`}>Details</Button></TableCell>
+                                </TableRow>
+                            )
+                        })}
+                    </TableBody>          
+                </Table>
+                : <CircularProgress color="primary" /> 
+            }
+
+        </div>
     )
 }
 

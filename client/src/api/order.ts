@@ -25,5 +25,8 @@ export const getOrder = async (id: string, accessToken: string) => {
 
     return axios.get(`http://localhost:5000/orders/${id}`, config)
         .then((res: any) => res.data.order)
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err.response);
+            throw err.response;
+        });
 };

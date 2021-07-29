@@ -72,21 +72,29 @@ var getYourOrders = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.getYourOrders = getYourOrders;
 var getCertainOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var orderId, order, error_2;
+    var userSession, orderId, order, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
+                userSession = req.cookies.userSession;
                 orderId = req.params.id;
                 return [4, Order_1.default.findById(orderId)];
             case 1:
                 order = _a.sent();
+                if (order === null)
+                    throw new Error('Order not finded in DB');
+                if (userSession._id !== order.user) {
+                    res.status(401).send({ error: 'Unauthorized' });
+                    return [2];
+                }
+                ;
                 res.status(200).send({ order: order });
                 return [3, 3];
             case 2:
                 error_2 = _a.sent();
                 console.log(error_2);
-                res.status(500).send({ message: new Error('Something went wrong') });
+                res.status(500).send({ message: 'Something went wrong' });
                 return [3, 3];
             case 3:
                 ;

@@ -18,11 +18,14 @@ export const getYourOrders =  async ( req: Request | any, res: Response ) => {
 
 export const getCertainOrder = async (req: Request | any, res: Response) => {
   try {
+    const userSession = req.cookies.userSession;
     const { id: orderId } = req.params;
     const order = await Order.findById(orderId);
+    if(order === null) throw new Error('Order not finded in DB');
+    if(userSession._id !== order.user) {res.status(401).send({error: 'Unauthorized'}); return;};
     res.status(200).send({order});
   } catch (error) {
     console.log(error);
-    res.status(500).send({message: new Error('Something went wrong')});
+    res.status(500).send({message: 'Something went wrong'});
   };
 };

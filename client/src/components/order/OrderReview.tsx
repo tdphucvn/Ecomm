@@ -1,9 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getOrder } from '../../api/order';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { updateAccessToken } from '../../redux/reducers/authenticate';
+import axios from 'axios';
+
+import { Grid, List, ListItem, ListItemText, Typography, makeStyles, ListItemAvatar, Divider } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    listItem: {
+      padding: theme.spacing(1, 0),
+    },
+    total: {
+      fontWeight: 700,
+    },
+    title: {
+      marginTop: theme.spacing(2),
+    },
+    container: {
+        width: '80%',
+        margin: 'auto',
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(3),
+        minHeight: '40vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignContent: 'center',
+    },
+    listItemImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 7
+    },
+    itemDescription: {
+        marginLeft: theme.spacing(2),
+    }
+}));
 
 type Params = {
     id: string;
@@ -38,7 +70,16 @@ type OrderType = {
     items: Array<Item>;
     price: number;
     _id: string;
-}
+    shippingInfo: {
+        name: string;
+        address1: string;
+        address2: string;
+        city: string;
+        country: string;
+        state: string;
+        zip: number;
+    };
+};
 
 const createHashmapFromPurchasedItems = (purchasedItems: Array<Item>, allProducts: Array<Item>) => {
     const itemsMap = new Map();
@@ -69,29 +110,71 @@ const createHashmapFromPurchasedItems = (purchasedItems: Array<Item>, allProduct
     return itemsSummary;
 };
 
+
 const OrderReview = () => {
+    const classes = useStyles();
+    const history = useHistory();
     const dispatch = useDispatch<AppDispatch>();
     const { id } = useParams<Params>();
-    const [order, setOrder] = useState<OrderType>();
-    const [items, setItems] = useState<Array<ItemSummary>>();
+    const [order, setOrder] = useState<OrderType>(undefined);
+    const [items, setItems] = useState<Array<ItemSummary>>(undefined);
     
     const { accessToken } = useSelector((state: RootState) => state.auth);
     const { products } = useSelector((state: RootState) => state.products);
 
     useEffect(() => {
-        getOrder(id, accessToken)
-            .then((data: OrderType) => {
-                setOrder(data);
-                setItems(createHashmapFromPurchasedItems(data.items, products));
-                console.log(createHashmapFromPurchasedItems(data.items, products));
-                console.log(data);
+        axios.get(`http://localhost:5000/orders/${id}` , {withCredentials: true, headers: {ContentType: 'application/json', Authorization: `Bearer ${accessToken}`}})
+            .then(res => {
+                const {data} = res;
+                setOrder(data.order);
+                setItems(createHashmapFromPurchasedItems(data.order.items, products))
             })
-            .catch(err => console.log(err));
-    }, [id, accessToken, products]);
+            .catch(err => {
+                console.log(err.response);
+                alert(err.response.data.error);
+                history.push('/');
+            });
+
+    }, [id, accessToken, products, history]);
 
     return (
-        <div>
-            
+        <div className={classes.container}>
+            { order !== undefined && items !== undefined ? 
+            <Grid container spacing={1}>
+                <Grid item sm={12} xs={12}>
+                    <Typography variant="h6" className={classes.title} gutterBottom>Purchased Items</Typography>
+                    <List disablePadding>
+                        {items.map((product: ItemSummary) => (
+                            <ListItem key={product.id} className={classes.listItem}>
+                                <ListItemAvatar>
+                                    <img src={product.image.url} alt={product.name} className={classes.listItemImage}/>
+                                </ListItemAvatar>
+                                <ListItemText primary={product.name} secondary={`Amount: ${product.amount}`} className={classes.itemDescription}/>
+                                <Typography variant="body2">${product.price}</Typography>
+                            </ListItem>
+                        ))}
+                        <Divider></Divider>
+                        <ListItem className={classes.listItem}>
+                            <ListItemText primary="Total" />
+                            <Typography className={classes.total} variant="subtitle1">${order.price}</Typography>
+                        </ListItem>
+                    </List>
+                </Grid>
+                <Grid item sm={12} xs={12}>
+                    <Typography variant="h6" className={classes.title} gutterBottom>Shipping Information</Typography>
+                    <Grid container>
+                        <Grid item xs={6}><Typography gutterBottom>Name</Typography></Grid>
+                        <Grid item xs={6}><Typography gutterBottom>{order.shippingInfo.name}</Typography></Grid>
+                        <Grid item xs={6}><Typography gutterBottom>First Address</Typography></Grid>
+                        <Grid item xs={6}><Typography gutterBottom>{order.shippingInfo.address1}</Typography></Grid>
+                        <Grid item xs={6}><Typography gutterBottom>Second Address</Typography></Grid>
+                        <Grid item xs={6}><Typography gutterBottom>{order.shippingInfo.address2 === '' ? 'Not given' : order.shippingInfo.address2}</Typography></Grid>
+                        <Grid item xs={6}><Typography gutterBottom>Country</Typography></Grid>
+                        <Grid item xs={6}><Typography gutterBottom>{`${order.shippingInfo.city} ${order.shippingInfo.state} ${order.shippingInfo.zip} ${order.shippingInfo.country}`}</Typography></Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+            : '' }
         </div>
     )
 }

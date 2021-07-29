@@ -170,14 +170,7 @@ const Header = () => {
                                 </li>
                             }
                         </ul>
-                        <li style={{flex: 2, justifyContent: 'flex-end'}}>
-                            <div className={classes.search}>
-                                <div className={classes.searchIcon}>
-                                    <SearchIcon />
-                                </div>
-                                <TextField placeholder="Search" name="searchProduct" className={classes.searchInput}/>
-                            </div>
-                        </li>
+                        <div style={{flex: 2}}></div>
                         <ul style={{flex: 1, justifyContent: 'flex-end'}}>
                             <li style={{marginRight: 20}}>
                                 {!auth.logged ? <Authentication {...auth}/> : 

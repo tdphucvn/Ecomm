@@ -104,7 +104,7 @@ const Review = (props) => {
                     <Typography gutterBottom>Second Address</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography gutterBottom>{props.address.address2}</Typography>
+                    <Typography gutterBottom>{props.address.address2 === '' ? 'Not given' : props.address.address2}</Typography>
                   </Grid>
                   <Grid item xs={6}>
                     <Typography gutterBottom>Country</Typography>
@@ -114,37 +114,6 @@ const Review = (props) => {
                   </Grid>
                 </Grid>
               </Grid>
-              {/* <Grid item container direction="column" xs={12} sm={6}>
-                <Typography variant="h6" gutterBottom className={classes.title}>
-                  Payment details
-                </Typography>
-                <Grid container>
-                    <Grid item xs={6}>
-                      <Typography gutterBottom>Card Holder</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography gutterBottom>{props.payment.name}</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography gutterBottom>Card Number</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography gutterBottom>{props.payment.cardNum}</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography gutterBottom>Expire Date</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography gutterBottom>{props.payment.expire}</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography gutterBottom>CVV</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography gutterBottom>{props.payment.cvv}</Typography>
-                    </Grid>
-                </Grid>
-              </Grid> */}
             </Grid>
         </div>
     )
