@@ -18,6 +18,12 @@ const useStyles = makeStyles((theme) => ({
         transform: 'translate(-50%,-50%)',
         zIndex: 5,
     },
+    heroText: {
+        width: '40%',
+        [theme.breakpoints.down('xs')]: {
+            width: '80%'
+        }
+    },
     btnShopNow: {
         marginTop: theme.spacing(4),
         marginBottom: theme.spacing(2),
@@ -44,7 +50,7 @@ const Hero = () => {
     return (
         <div className={classes.heroContainer}>
             <div className={classes.heroTextContainer}>
-                <Typography variant="h4" gutterBottom={true} style={{width: '40%'}}>Shop all brands and essentials, Now with huge discounts.</Typography>
+                <Typography variant="h4" gutterBottom={true} className={classes.heroText}>Shop all brands and essentials, Now with huge discounts.</Typography>
                 <Typography variant="body1">Coming to your doorstep with a huge discount.</Typography>
                 <div className={classes.btnShopNow}>
                     <Button color="primary" variant="contained" component={RouterLink} to={admin ? '/manage' : 'products'}>Shop Now</Button>

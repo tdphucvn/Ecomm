@@ -10,16 +10,25 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flexWrap: 'wrap',
     },
     selectContainer: {
         marginLeft: theme.spacing(3),
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 0,
+            marginTop: theme.spacing(2),
+        }
     },
     sortSelect: {
         width: 150,
+        [theme.breakpoints.down('xs')]: {
+            width: 250,
+        }
     },
     searchInput: {
-        width: 250
+        width: 250,
+        
     }
 }));
 

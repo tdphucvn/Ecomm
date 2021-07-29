@@ -8,9 +8,11 @@ const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
         minHeight: '10vh',
+        flexWrap: 'wrap',
     },
     collectionContainer: {
         flex: 1,
+        minWidth: '300px',
         '& ul':{
             listStyle: 'none', 
             padding: 0,
@@ -28,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
     },
     contactContainer: {
         flex: 1,
+        minWidth: '300px',
+
         '& ul':{
             listStyle: 'none', 
             padding: 0,
@@ -45,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     },
     newsletterContainer: {
         flex: 2,
+        minWidth: '300px',
         '& ul':{
             listStyle: 'none', 
             padding: 0,

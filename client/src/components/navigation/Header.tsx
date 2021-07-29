@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import { Typography, makeStyles, Link, TextField, Badge, IconButton, Button } from '@material-ui/core';
+import { Typography, makeStyles, Link, Badge, IconButton, Button } from '@material-ui/core';
 import logo from '../../images/logo.png';
 import { Link as RouterLink } from 'react-router-dom';
-import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { logoutRequest } from '../../redux/reducers/authenticate';
+import MenuIcon from '@material-ui/icons/Menu';
+import Drawer from './DrawerNavigation';
 
 const useStyles = makeStyles((theme) => ({
     sumBar: {
@@ -14,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         width: '80%',
         margin: 'auto',
+        justifyContent: 'flex-end',
         '& a': {
             textDecoration: 'none',
             color: 'black',
@@ -21,8 +23,11 @@ const useStyles = makeStyles((theme) => ({
                 color: '#587D9F'
             }, 
         },
-        
-        opacity: 0.7,  
+        flexWrap: 'wrap',
+        opacity: 0.7,
+        [theme.breakpoints.down('xs')]: {
+            display: 'none'
+        }, 
     },
     navBar: {
         width: '80%',
@@ -30,31 +35,61 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-evenly', 
-        '& ul':{
-            padding: 0,
-            listStyle: 'none', 
+        flexWrap: 'wrap',
+    },
+    navBarLinks: {
+        display: 'flex',
+        listStyle: 'none',
+        padding: 0,
+        [theme.breakpoints.down('xs')]: {
+            display: 'none'
+        },
+        flex: 3,
+        justifyContent: 'flex-start',
+        '& a': {
+            textDecoration: 'none',
+            color: 'black',
+            '&:hover': {
+                color: '#587D9F'
+            }, 
+        },
+        '& li':{
             display: 'flex',
-            '& a': {
-                textDecoration: 'none',
-                color: 'black',
-                '&:hover': {
-                    color: '#587D9F'
-                }, 
-            },
-            '& li':{
-                display: 'flex',
-                alignItems: 'center',
-            },
-        }
+            alignItems: 'center',
+        }, 
     },
     contactContainer: {
         display: 'flex',
-        flex: 1.3,
         alignItems: 'center',
-        justifyContent: 'space-between',  
     },
     growContainer: {
-        flexGrow: 3, 
+        flexGrow: 1,
+        [theme.breakpoints.down('xs')]: {
+            display: 'none'
+        }, 
+    },
+    authentication: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        display: 'flex',
+        listStyle: 'none',
+        padding: 0,
+        alignItems: 'center',
+        textDecoration: 'none',
+        [theme.breakpoints.down('xs')]: {
+            flex: 2
+        }
+    },
+    authLink: {
+        [theme.breakpoints.down('xs')]: {
+            display: 'none',
+        },
+    },
+    hamburger: {
+        display: 'none',
+        [theme.breakpoints.down('xs')]: {
+            display: 'block',
+        },
     },
     heroContainer: {
         background: '#F2FBFF',
@@ -96,7 +131,7 @@ type Auth = {
 const Authentication = (props: Auth) => {
     const {link, text} = props;
     return (
-        <RouterLink to={`/authentication${link}`}>
+        <RouterLink to={`/authentication${link}`} style={{textDecoration: 'none', color: 'black'}}>
             <Typography>{text}</Typography>
         </RouterLink>
     )
@@ -106,6 +141,7 @@ const Header = () => {
     const classes = useStyles();
     const dispatch = useDispatch<AppDispatch>();
     const [auth, setAuth] = useState<Auth>({logged: false, link: '/login', text: 'Login'});
+    const [drawer, setDrawer] = useState<boolean>(false);
     const [adminState, setAdminState] = useState<boolean>(false);
     const { authenticated, admin } = useSelector((state: RootState) => state.auth);
     const { count } = useSelector((state: RootState) => state.cart);
@@ -130,26 +166,20 @@ const Header = () => {
         <>
             <div className={classes.sumBar}>
                 <div className={classes.contactContainer}>
-                    <Typography>+420•123456789</Typography>
-                    <Typography> • </Typography>
-                    <Typography><a href="mailto:ecomm@gmail.com"> ecomm@gmail.com </a></Typography>
-                </div>
-                <div className={classes.growContainer}></div>
-                <div className={classes.contactContainer}>
                     <Typography component={RouterLink} to="/contact">CONTACT US</Typography>
-                    <Typography>•</Typography>
+                    <Typography style={{margin: '0 20px'}}>•</Typography>
                     <Typography component={RouterLink} to="/orders">YOUR ORDERS</Typography>
                 </div>
             </div>
             <div className={classes.heroContainer}>
                 <nav className={classes.navBar}>
-                    <ul style={{width: '100%'}}>
+                    <ul style={{width: '100%', display: 'flex', listStyle: 'none', padding: 0}}>
                         <li style={{flex: 1}}>
                             <Link component={RouterLink} to="/">
                             <img src={logo} alt="" style={{height: 70, width: 70}}/>
                             </Link>
                         </li>
-                        <ul style={{flex: 3, justifyContent: 'flex-start'}}>
+                        <ul className={classes.navBarLinks}>
                             <li style={{marginRight: 20}}>
                                 <RouterLink to="/collection">
                                     <Typography>COLLECTION</Typography>
@@ -170,9 +200,9 @@ const Header = () => {
                                 </li>
                             }
                         </ul>
-                        <div style={{flex: 2}}></div>
-                        <ul style={{flex: 1, justifyContent: 'flex-end'}}>
-                            <li style={{marginRight: 20}}>
+                        <div className={classes.growContainer}></div>
+                        <ul className={classes.authentication}>
+                            <li style={{marginRight: 20}} className={classes.authLink}>
                                 {!auth.logged ? <Authentication {...auth}/> : 
                                     <Button onClick={handleLogout}>Log Out</Button>
                                 }
@@ -184,10 +214,16 @@ const Header = () => {
                                     </Badge>
                                 </IconButton>
                             </li>
+                            <li className={classes.hamburger}>
+                                <IconButton onClick={() => setDrawer(previousState => !previousState)}>
+                                    <MenuIcon />
+                                </IconButton>
+                            </li>
                         </ul>
                     </ul>
                 </nav>
             </div>
+            <Drawer drawer={drawer} setDrawer={setDrawer} handleLogout={handleLogout} />
         </>
     )
 }

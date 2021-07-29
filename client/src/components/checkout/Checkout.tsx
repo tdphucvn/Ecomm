@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(3),
     },
     layout: {
         width: 'auto',

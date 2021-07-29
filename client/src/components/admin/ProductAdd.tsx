@@ -31,16 +31,29 @@ const useStyles = makeStyles((theme) => ({
         '& img': {
             display: 'block',
             width: '100%',
-            height: 500,
-            objectFit: 'cover', 
+            height: 450,
+            objectFit: 'cover',
+            [theme.breakpoints.down('xs')]: {
+                height: 350
+            } 
         },
+        [theme.breakpoints.down('xs')]: {
+            width: 270,
+            minWidth: 270, 
+            height: 350,
+            margin: '0 auto 20px auto'
+        }
     },
     productsDetails: {
         minWidth: 350,
         flex: 2,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        [theme.breakpoints.down('xs')]: {
+            width: 270,
+            minWidth: 270, 
+        }
     },
     input: {
         marginTop: theme.spacing(1),

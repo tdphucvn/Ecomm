@@ -19,6 +19,14 @@ const useStyles = makeStyles((theme) => ({
     },
     deleteButton: {
         marginLeft: theme.spacing(3),
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: theme.spacing(1)
+        }
+    },
+    addButton: {
+        '& span': {
+            textAlign: 'center',
+        },
     }
 }));
 
@@ -48,7 +56,7 @@ const Manage = () => {
     return (
         <div>
             <div className={classes.container}>
-                <Button variant="contained" color="primary" component={RouterLink} to="/manage/add">Add Product</Button>
+                <Button variant="contained" color="primary" component={RouterLink} to="/manage/add" className={classes.addButton}>Add Product</Button>
                 <Button variant="contained" color="secondary" className={classes.deleteButton} onClick={handleDeleteProducts}>{loading ? <CircularProgress style={{color: 'white'}} /> : 'Delete Products' }</Button>
             </div>
             <Products productsID={productsIDDelete} setProductsID={setProductsIDDelete} />

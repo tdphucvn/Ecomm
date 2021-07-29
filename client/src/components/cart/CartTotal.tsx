@@ -19,6 +19,6 @@ const CartTotal = () => {
             <Button component={RouterLink} to="/checkout" color="primary" variant="contained" style={{marginLeft: 10}} disabled={disabledCheckout} >Checkout</Button>
         </div>
     )
-}
+};
 
 export default CartTotal;

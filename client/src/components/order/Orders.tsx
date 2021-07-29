@@ -58,32 +58,34 @@ const Orders = () => {
         <div className={classes.container}>
             <Typography component="h2" variant="h5" gutterBottom>Your Orders</Typography>
             { 
-                orders ? 
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Order ID</TableCell>
-                            <TableCell>Date</TableCell>
-                            <TableCell>Amount</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {orders.map((order: OrderType) => {
-                            const date = order.date.split('T')[0];
-                            return (
-                                <TableRow  key={order._id}>
-                                    <TableCell>{order._id}</TableCell>
-                                    <TableCell>{date}</TableCell>
-                                    <TableCell>{order.items.length}</TableCell>
-                                    <TableCell>{order.price}</TableCell>
-                                    <TableCell><Button component={RouterLink} to={`/orders/${order._id}`}>Details</Button></TableCell>
-                                </TableRow>
-                            )
-                        })}
-                    </TableBody>          
-                </Table>
+                orders ?
+                <div style={{overflowX: 'auto'}}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Order ID</TableCell>
+                                <TableCell>Date</TableCell>
+                                <TableCell>Amount</TableCell>
+                                <TableCell>Price</TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {orders.map((order: OrderType) => {
+                                const date = order.date.split('T')[0];
+                                return (
+                                    <TableRow  key={order._id}>
+                                        <TableCell>{order._id}</TableCell>
+                                        <TableCell>{date}</TableCell>
+                                        <TableCell>{order.items.length}</TableCell>
+                                        <TableCell>{order.price}</TableCell>
+                                        <TableCell><Button component={RouterLink} to={`/orders/${order._id}`}>Details</Button></TableCell>
+                                    </TableRow>
+                                )
+                            })}
+                        </TableBody>          
+                    </Table>
+                </div> 
                 : <CircularProgress color="primary" /> 
             }
 
