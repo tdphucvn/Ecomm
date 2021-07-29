@@ -47,7 +47,7 @@ const DisplayTopProducts = (props: Props) => {
 
     useEffect(() => {
         if(category === '') return;
-        axios.get(`http://localhost:5000/products/collection?category=${category}`)
+        axios.get(`/products/collection?category=${category}`)
             .then(res => setProducts(res.data.products))
             .catch(err => console.log(err));
     }, [category]);

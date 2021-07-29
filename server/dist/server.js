@@ -22,7 +22,7 @@ var app = express_1.default();
 app.use(cookie_parser_1.default());
 app.use(express_1.default.json({ limit: '50mb' }));
 app.use(express_1.default.urlencoded({ limit: '50mb', extended: true }));
-app.use(cors_1.default({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(cors_1.default({ credentials: true, origin: '*' }));
 app.use('/products', products_1.default);
 app.use('/products', productsAdmin_1.default);
 app.use('/contact', contact_1.default);

@@ -9,7 +9,7 @@ export const getAllOrders = async (accessToken: string) => {
         withCredentials: true,
     };
 
-    return axios.get('http://localhost:5000/orders', config)
+    return axios.get('/orders', config)
         .then((res: any) => res.data)
         .catch(err => console.log(err));
 };
@@ -23,7 +23,7 @@ export const getOrder = async (id: string, accessToken: string) => {
         withCredentials: true,
     };
 
-    return axios.get(`http://localhost:5000/orders/${id}`, config)
+    return axios.get(`/orders/${id}`, config)
         .then((res: any) => res.data.order)
         .catch(err => {
             console.log(err.response);

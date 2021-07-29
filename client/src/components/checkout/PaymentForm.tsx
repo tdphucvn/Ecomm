@@ -17,7 +17,7 @@ const PaymentForm = (props) => {
 
     useEffect(() => {
         window
-          .fetch("http://localhost:5000/payment/create-payment-intent", {
+          .fetch("/payment/create-payment-intent", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
