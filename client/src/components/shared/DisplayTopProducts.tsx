@@ -47,7 +47,7 @@ const DisplayTopProducts = (props: Props) => {
 
     useEffect(() => {
         if(category === '') return;
-        axios.get(`https://ecommercepage.herokuapp.com/products/collection?category=${category}`)
+        axios.get(`/api/products/collection?category=${category}`)
             .then(res => setProducts(res.data.products))
             .catch(err => console.log(err));
     }, [category]);

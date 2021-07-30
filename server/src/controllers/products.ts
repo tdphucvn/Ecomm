@@ -56,7 +56,6 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
         const fetchedProducts = await Products.find(query).sort(sortQuery);
         const numberOfProducts: number = await Products.countDocuments();
         const numberOfPages: number = Math.ceil(numberOfProducts / 6);
-        res.header("Access-Control-Allow-Origin", "*");
         res.json({message: "Success fetch", fetchedProducts, numberOfPages});
     } catch (error) {
         console.log(error);  

@@ -67,9 +67,9 @@ const assigningTokens = (user: IUser, response: Response) => {
     const newAccessToken: string = jwt.sign({ user }, accessSecretToken, {expiresIn: '30s'}); //Creating an access token with JWT
     const newRefreshToken: string = jwt.sign({ user }, refreshSecretToken, {expiresIn: '1day'}); //Creating a refresh token with JWT
     
-    response.cookie('authorization', newAccessToken,  {domain: 'localhost', httpOnly: true, secure: true}); // Using cookie to store Access token
-    response.cookie('refreshToken', newRefreshToken, {domain: 'localhost', httpOnly: true, secure: true}); // Using cookie to store Refresh token
-    response.cookie('userSession', user, {domain: 'localhost', httpOnly: true, secure: true}); // Using cookie to store data about the user
+    response.cookie('authorization', newAccessToken,  { httpOnly: true, secure: true}); // Using cookie to store Access token
+    response.cookie('refreshToken', newRefreshToken, { httpOnly: true, secure: true}); // Using cookie to store Refresh token
+    response.cookie('userSession', user, { httpOnly: true, secure: true}); // Using cookie to store data about the user
 
     return [newAccessToken, newRefreshToken];
 };

@@ -123,7 +123,7 @@ const OrderReview = () => {
     const { products } = useSelector((state: RootState) => state.products);
 
     useEffect(() => {
-        axios.get(`https://ecommercepage.herokuapp.com/orders/${id}` , {withCredentials: true, headers: {ContentType: 'application/json', Authorization: `Bearer ${accessToken}`}})
+        axios.get(`/api/orders/${id}` , {withCredentials: true, headers: {ContentType: 'application/json', Authorization: `Bearer ${accessToken}`}})
             .then(res => {
                 const {data} = res;
                 setOrder(data.order);

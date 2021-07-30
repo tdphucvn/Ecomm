@@ -97,7 +97,6 @@ var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 2:
                 numberOfProducts = _b.sent();
                 numberOfPages = Math.ceil(numberOfProducts / 6);
-                res.header("Access-Control-Allow-Origin", "*");
                 res.json({ message: "Success fetch", fetchedProducts: fetchedProducts, numberOfPages: numberOfPages });
                 return [3, 4];
             case 3:

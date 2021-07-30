@@ -15,6 +15,7 @@ import authenticationRoute from './routes/authentication';
 import productsAdminRoute from './routes/admin/productsAdmin';
 import paymentRouter from './routes/payment';
 import ordersRouter from './routes/private/orders';
+import path from 'path';
 
 const app: Application = express();
 
@@ -25,13 +26,19 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({ credentials: true, origin: 'http://localhost:3000'}));
 
+app.use(express.static(path.join(__dirname, 'build')))
 
-app.use('/products', productsRoute);
-app.use('/products', productsAdminRoute);
-app.use('/contact', contactRoute);
-app.use('/authentication', authenticationRoute);
-app.use('/payment', paymentRouter);
-app.use('/orders', ordersRouter);
+
+app.use('/api/products', productsRoute);
+app.use('/api/products', productsAdminRoute);
+app.use('/api/contact', contactRoute);
+app.use('/api/authentication', authenticationRoute);
+app.use('/api/payment', paymentRouter);
+app.use('/api/orders', ordersRouter);
+
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 const uri: string = `${process.env.DB_CONNECTION}`;
 const options = { useUnifiedTopology: true , useNewUrlParser: true };
