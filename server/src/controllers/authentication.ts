@@ -9,6 +9,9 @@ const saltRounds: number = 10;
 
 export const loginRequest = async (req: Request, res: Response): Promise<void> => {
     try {
+        const cookies = req.cookies.refreshToken;
+        console.log(cookies);
+
         const credentials = req.body as Pick<IUser, "username" | "password" >;
         const user = await User.findOne({username: credentials.username});
         if(user == null) throw new Error("User not found");
@@ -17,10 +20,10 @@ export const loginRequest = async (req: Request, res: Response): Promise<void> =
         
         const token = assigningTokens(user, res);
 
-        res.json({message: 'Succesfully logged in', auth: true, user, token});
+        res.json({message: 'Succesfully logged in', auth: true, user, acessToken: token[0], refreshToken: token[1]});
     } catch (error) {
         res.status(401).json({message: error.message});
-    };
+    }; 
 };
 
 export const registerRequest = async (req: Request, res: Response): Promise<void> => {
@@ -44,7 +47,7 @@ export const registerRequest = async (req: Request, res: Response): Promise<void
 
         const token = assigningTokens(user, res);
 
-        res.json({message: 'Thank your for signing up', auth: true, user, token});
+        res.json({message: 'Thank your for signing up', auth: true, user, acessToken: token[0], refreshToken: token[1]});
     } catch (error) {
         res.status(400).json({message: error.message});
     };
@@ -64,9 +67,9 @@ const assigningTokens = (user: IUser, response: Response) => {
     const newAccessToken: string = jwt.sign({ user }, accessSecretToken, {expiresIn: '30s'}); //Creating an access token with JWT
     const newRefreshToken: string = jwt.sign({ user }, refreshSecretToken, {expiresIn: '1day'}); //Creating a refresh token with JWT
     
-    response.cookie('authorization', newAccessToken,  {httpOnly: true}); // Using cookie to store Access token
-    response.cookie('refreshToken', newRefreshToken, {httpOnly: true}); // Using cookie to store Refresh token
-    response.cookie('userSession', user, {httpOnly: true}); // Using cookie to store data about the user
+    response.cookie('authorization', newAccessToken,  {domain: 'localhost', httpOnly: true, secure: true}); // Using cookie to store Access token
+    response.cookie('refreshToken', newRefreshToken, {domain: 'localhost', httpOnly: true, secure: true}); // Using cookie to store Refresh token
+    response.cookie('userSession', user, {domain: 'localhost', httpOnly: true, secure: true}); // Using cookie to store data about the user
 
-    return newAccessToken;
-}
+    return [newAccessToken, newRefreshToken];
+};

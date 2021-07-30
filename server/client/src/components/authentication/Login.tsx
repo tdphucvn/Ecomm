@@ -56,7 +56,6 @@ const Login = () => {
   const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
 
-
   const handleLoginRequest = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {

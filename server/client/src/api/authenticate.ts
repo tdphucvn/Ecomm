@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const loginRequest = async (username: string, password: string) => {
-    return axios.post('/authentication/login', {username, password}, {withCredentials: true})
+    return axios.post('https://ecommercepage.herokuapp.com/authentication/login', {username, password}, {withCredentials: true})
       .then(res => ({
         data: res.data,
         status: res.status,
@@ -21,7 +21,7 @@ export const loginRequest = async (username: string, password: string) => {
 };
 
 export const registerRequest = async (username: string, password: string, email: string, firstName: string, lastName: string) => {
-    return axios.post('/authentication/register', {username, password, email, firstName, lastName}, {withCredentials: true})
+    return axios.post('https://ecommercepage.herokuapp.com/authentication/register', {username, password, email, firstName, lastName}, {withCredentials: true})
       .then(res => ({
         data: res.data,
         status: res.status,
@@ -41,7 +41,7 @@ export const registerRequest = async (username: string, password: string, email:
 };
 
 export const logoutRequest = async () => {
-  return axios.delete('/authentication/logout', {withCredentials: true})
+  return axios.delete('https://ecommercepage.herokuapp.com/authentication/logout', {withCredentials: true})
     .then(res => ({
       data: res.data,
       status: res.status,

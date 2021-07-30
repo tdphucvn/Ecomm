@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(cors({ credentials: true, origin: '*' }));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000'}));
 
 
 app.use('/products', productsRoute);
@@ -38,7 +38,7 @@ const options = { useUnifiedTopology: true , useNewUrlParser: true };
 mongoose.set("useFindAndModify", false);
 
 mongoose.connect(uri, options).then(() => {
-    app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
+    app.listen(PORT, () => console.log(`Server * running on PORT ${PORT}`));
 }).catch (err => {
     console.log('Access denied');
     console.error(err);

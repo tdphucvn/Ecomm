@@ -17,7 +17,7 @@ const PaymentForm = (props) => {
 
     useEffect(() => {
         window
-          .fetch("/payment/create-payment-intent", {
+          .fetch("https://ecommercepage.herokuapp.com/payment/create-payment-intent", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"

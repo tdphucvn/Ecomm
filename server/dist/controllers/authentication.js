@@ -45,11 +45,13 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var User_1 = __importDefault(require("../model/User"));
 var saltRounds = 10;
 var loginRequest = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var credentials, user, validPassword, token, error_1;
+    var cookies, credentials, user, validPassword, token, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
+                cookies = req.cookies.refreshToken;
+                console.log(cookies);
                 credentials = req.body;
                 return [4, User_1.default.findOne({ username: credentials.username })];
             case 1:
@@ -62,7 +64,7 @@ var loginRequest = function (req, res) { return __awaiter(void 0, void 0, void 0
                 if (!validPassword)
                     throw new Error("Invalid Password");
                 token = assigningTokens(user, res);
-                res.json({ message: 'Succesfully logged in', auth: true, user: user, token: token });
+                res.json({ message: 'Succesfully logged in', auth: true, user: user, acessToken: token[0], refreshToken: token[1] });
                 return [3, 4];
             case 3:
                 error_1 = _a.sent();
@@ -110,7 +112,7 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
             case 5:
                 _a.sent();
                 token = assigningTokens(user, res);
-                res.json({ message: 'Thank your for signing up', auth: true, user: user, token: token });
+                res.json({ message: 'Thank your for signing up', auth: true, user: user, acessToken: token[0], refreshToken: token[1] });
                 return [3, 7];
             case 6:
                 error_2 = _a.sent();
@@ -138,8 +140,8 @@ var assigningTokens = function (user, response) {
     var refreshSecretToken = "" + process.env.REFRESH_TOKEN_SECRET;
     var newAccessToken = jsonwebtoken_1.default.sign({ user: user }, accessSecretToken, { expiresIn: '30s' });
     var newRefreshToken = jsonwebtoken_1.default.sign({ user: user }, refreshSecretToken, { expiresIn: '1day' });
-    response.cookie('authorization', newAccessToken, { httpOnly: true });
-    response.cookie('refreshToken', newRefreshToken, { httpOnly: true });
-    response.cookie('userSession', user, { httpOnly: true });
-    return newAccessToken;
+    response.cookie('authorization', newAccessToken, { domain: 'localhost', httpOnly: true, secure: true });
+    response.cookie('refreshToken', newRefreshToken, { domain: 'localhost', httpOnly: true, secure: true });
+    response.cookie('userSession', user, { domain: 'localhost', httpOnly: true, secure: true });
+    return [newAccessToken, newRefreshToken];
 };

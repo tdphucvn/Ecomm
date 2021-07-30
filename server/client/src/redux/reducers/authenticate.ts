@@ -102,7 +102,7 @@ export const authenticateSlice = createSlice({
             state.loading = false;
             state.authenticated = true;
             state.user = action.payload.data.user;
-            state.accessToken = action.payload.data.token;
+            state.accessToken = action.payload.data.accessToken;
             if(action.payload.data.user.admin) state.admin = true;
         });
         builder.addCase(loginRequest.rejected, (state, action) => {
@@ -113,7 +113,7 @@ export const authenticateSlice = createSlice({
             state.loading = false;
             state.authenticated = true;
             state.user = action.payload.data.user;
-            state.accessToken = action.payload.data.token;
+            state.accessToken = action.payload.data.accessToken;
             if(action.payload.data.user.admin) state.admin = true;
         });
         builder.addCase(registerRequest.rejected, (state, action) => {
