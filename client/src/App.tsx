@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import PrivateRoute from './routes/PrivateRoute';
 import AdminRoute from './routes/AdminRoute';
@@ -25,7 +25,17 @@ import CheckoutFooter from './components/navigation/checkout/CheckoutFooter';
 import Orders from './components/order/Orders';
 import OrderReview from './components/order/OrderReview';
 
+import { useDispatch } from 'react-redux';
+import { getProductsRequest } from './redux/reducers/productsSlice';
+import { AppDispatch } from './redux/store';
+
 const App: FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    useEffect( () => {
+        dispatch(getProductsRequest({sortState: 'none', filterState: 'all'}))
+            .then(res => console.log(res));
+    }, [dispatch]);
+
     return (
         <>
             <Router>
