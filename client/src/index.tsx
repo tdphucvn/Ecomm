@@ -7,16 +7,30 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { CookiesProvider } from 'react-cookie';
 
+import { createMuiTheme } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
+
+const theme = createMuiTheme({
+    typography: {
+      fontFamily: [
+        'Poppins',
+        'sans-serif'
+      ].join(','),
+    }
+});
+
 let persistor = persistStore(store);
 
 ReactDOM.render(
-    <CookiesProvider>
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <App />
-            </PersistGate>
-        </Provider>
-    </CookiesProvider>,
+    <ThemeProvider theme={theme}>
+        <CookiesProvider>
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
+                    <App />
+                </PersistGate>
+            </Provider>
+        </CookiesProvider>
+    </ThemeProvider>,
 document.getElementById('root')
 );
 

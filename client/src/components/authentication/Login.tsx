@@ -94,11 +94,6 @@ const Login = () => {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <RouterLink to="#" className={classes.link}>
-                <Typography variant="body2">Forgot password?</Typography>
-              </RouterLink>
-            </Grid>
             <Grid item>
               <RouterLink to="/authentication/register" className={classes.link}>
                 <Typography variant="body2">Don't have an account? Sign Up</Typography>

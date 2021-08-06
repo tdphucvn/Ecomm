@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/static/js/main.d15055e6.chunk.js",
-    "main.js.map": "/static/js/main.d15055e6.chunk.js.map",
+    "main.js": "/static/js/main.89018876.chunk.js",
+    "main.js.map": "/static/js/main.89018876.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.9b89de3f.js",
     "runtime-main.js.map": "/static/js/runtime-main.9b89de3f.js.map",
-    "static/js/2.d3f82282.chunk.js": "/static/js/2.d3f82282.chunk.js",
-    "static/js/2.d3f82282.chunk.js.map": "/static/js/2.d3f82282.chunk.js.map",
+    "static/js/2.2fb63c2d.chunk.js": "/static/js/2.2fb63c2d.chunk.js",
+    "static/js/2.2fb63c2d.chunk.js.map": "/static/js/2.2fb63c2d.chunk.js.map",
     "index.html": "/index.html",
-    "static/js/2.d3f82282.chunk.js.LICENSE.txt": "/static/js/2.d3f82282.chunk.js.LICENSE.txt",
+    "static/js/2.2fb63c2d.chunk.js.LICENSE.txt": "/static/js/2.2fb63c2d.chunk.js.LICENSE.txt",
     "static/media/chair.513e1ad2.png": "/static/media/chair.513e1ad2.png",
     "static/media/grocery.1f788de7.png": "/static/media/grocery.1f788de7.png",
     "static/media/logo.9a821720.png": "/static/media/logo.9a821720.png",
@@ -15,7 +15,7 @@
   },
   "entrypoints": [
     "static/js/runtime-main.9b89de3f.js",
-    "static/js/2.d3f82282.chunk.js",
-    "static/js/main.d15055e6.chunk.js"
+    "static/js/2.2fb63c2d.chunk.js",
+    "static/js/main.89018876.chunk.js"
   ]
 }
